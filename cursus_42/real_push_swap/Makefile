@@ -6,7 +6,7 @@
 #    By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/24 13:46:37 by bcaumont          #+#    #+#              #
-#    Updated: 2025/01/25 09:54:51 by bcaumont         ###   ########.fr        #
+#    Updated: 2025/01/25 11:46:43 by bcaumont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,18 +17,18 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iincludes
 
 SRC = main.c \
-	  algorythms.c \
-	  checkers.c \
+	  check`s.c \
 	  double_linked_list.c \
 	  errors.c \
 	  finders.c \
-	  init_nodes.c \
 	  moves.c \
 	  push.c \
 	  rev_rotates.c \
 	  rotates.c \
 	  sets.c \
+	  sort_3.c\
 	  swaps.c \
+	  turk_sort.c\
 	  utils.c
 
 OBJS = $(SRC:.c=.o)

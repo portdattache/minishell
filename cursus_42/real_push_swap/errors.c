@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 11:48:13 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/01/25 11:31:05 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/01/25 11:40:50 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	error_duplicate(t_node *a, int n)
 	return (0);
 }
 
-void	safety_check(char *s, t_node *a, long n)
+void	conditions_check(char *s, t_node *a, long n)
 {
 	if (n < INT_MIN || n > INT_MAX)
 		free_errors(&a);
