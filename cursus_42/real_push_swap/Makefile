@@ -6,7 +6,7 @@
 #    By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/24 13:46:37 by bcaumont          #+#    #+#              #
-#    Updated: 2025/01/25 11:46:43 by bcaumont         ###   ########.fr        #
+#    Updated: 2025/01/25 11:47:43 by bcaumont         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iincludes
 
 SRC = main.c \
-	  check`s.c \
+	  checks.c \
 	  double_linked_list.c \
 	  errors.c \
 	  finders.c \
