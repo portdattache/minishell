@@ -6,11 +6,11 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 12:47:05 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/01/25 13:26:18 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:42:00 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
 t_node	*plus_gros(t_node *stack)
 {

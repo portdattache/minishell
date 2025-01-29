@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 12:28:11 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/01/25 15:25:08 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:23:29 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,23 +71,27 @@ void				prep_for_push(t_node **stack, t_node *top_node,
 /* Rotations */
 void				ra(t_node **stack_a);
 void				rb(t_node **stack_b);
-void				rr(t_node **stack_a, t_node **stack_b);
+void				rr(t_node **stack_a, t_node **stack_b, bool print);
+void				rotate(t_node **stack);
 void				rotate_both(t_node **a, t_node **b, t_node *cheapest);
 
 /* Rotations inversees */
 void				rra(t_node **stack_a);
 void				rrb(t_node **stack_b);
-void				rrr(t_node **stack_a, t_node **stack_b);
+void				rrr(t_node **stack_a, t_node **stack_b, bool print);
+void				reverse_rotate(t_node **stack);
 void				rev_rotate_both(t_node **a, t_node **b, t_node *cheapest);
 
 /* Swaps */
 void				sa(t_node **stack_a);
 void				sb(t_node **stack_b);
-void				ss(t_node **stack_a, t_node **stack_b);
+void				ss(t_node **stack_a, t_node **stack_b, bool print);
+void				swap(t_node **head);
 
 /* Poussees */
 void				pa(t_node **stack_a, t_node **stack_b);
 void				pb(t_node **stack_a, t_node **stack_b);
+void				push(t_node **dest, t_node **source);
 
 /* Double liste chainee */
 t_node				*add_to_empty(int number);

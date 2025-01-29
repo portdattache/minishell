@@ -6,13 +6,13 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 13:03:09 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/01/25 13:08:36 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:18:10 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
-static void	swap(t_node **head)
+void	swap(t_node **head)
 {
 	if (!*head || !(*head)->suivant)
 		return ;
@@ -36,9 +36,10 @@ void	sb(t_node **stack_b)
 	ft_printf("sb\n");
 }
 
-void	ss(t_node **stack_a, t_node **stack_b)
+void	ss(t_node **stack_a, t_node **stack_b, bool print)
 {
 	sa(stack_a);
 	sb(stack_b);
-	ft_printf("ss\n");
+	if (!print)
+		ft_printf("ss\n");
 }

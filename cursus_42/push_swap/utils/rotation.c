@@ -6,13 +6,13 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 13:01:25 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/01/25 15:21:02 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:21:08 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
-static void	rotate(t_node **stack)
+void	rotate(t_node **stack)
 {
 	t_node	*last;
 
@@ -38,17 +38,18 @@ void	rb(t_node **stack_b)
 	ft_printf("rb\n");
 }
 
-void	rr(t_node **stack_a, t_node **stack_b)
+void	rr(t_node **stack_a, t_node **stack_b, bool print)
 {
 	rotate(stack_a);
 	rotate(stack_b);
-	ft_printf("rr\n");
+	if (!print)
+		ft_printf("rr\n");
 }
 
 void	rotate_both(t_node **a, t_node **b, t_node *cheapest)
 {
 	while (*b != cheapest->cible && *a != cheapest)
-		rr(a, b);
+		rr(a, b, false);
 	definir_position(*a);
 	definir_position(*b);
 }

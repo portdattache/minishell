@@ -6,11 +6,11 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 12:37:20 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/01/25 12:39:00 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:42:51 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
 bool	pile_triee(t_node *stack)
 {

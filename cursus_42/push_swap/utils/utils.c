@@ -6,11 +6,11 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 13:10:13 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/01/25 13:27:38 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:42:43 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
 void	definir_position(t_node *stack)
 {

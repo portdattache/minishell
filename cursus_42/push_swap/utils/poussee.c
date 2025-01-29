@@ -6,13 +6,13 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 12:59:31 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/01/25 15:22:20 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:12:58 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "../push_swap.h"
 
-static void	push(t_node **dest, t_node **source)
+void	push(t_node **dest, t_node **source)
 {
 	t_node	*to_push;
 
