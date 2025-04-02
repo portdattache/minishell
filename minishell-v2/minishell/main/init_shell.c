@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:37:26 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/04/01 14:29:41 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/04/02 08:00:11 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	init_shell(t_shell *shell, char **envp)
 		if (!new_env)
 			exit(EXIT_FAILURE);
 		new_env->var = ft_strdup(envp[i]);
+		new_env->key = NULL;
+		new_env->value = NULL;
 		new_env->next = NULL;
 		new_env->prev = NULL;
 		if (!shell->env)
@@ -54,7 +56,12 @@ void	cleanup_shell(t_shell *shell)
 	while (tmp)
 	{
 		next = tmp->next;
-		free(tmp->var);
+		if (tmp->key != NULL)
+			free(tmp->key);
+		if (tmp->value != NULL)
+			free(tmp->value);
+		if (tmp->var != NULL)
+			free(tmp->var);
 		free(tmp);
 		tmp = next;
 	}

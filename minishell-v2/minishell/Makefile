@@ -18,7 +18,6 @@ SRC = src_built_in/cd.c\
 	  pipex/pipeline.c\
 	  main/execute_pipe_from_minishell.c\
 	  main/init_shell.c\
-	  main/shell_node.c\
 	  main/main.c\
 
 OBJS = $(SRC:.c=.o)

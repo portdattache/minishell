@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:00:22 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/03/21 10:05:26 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/04/02 07:47:14 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,32 @@ int	ft_export(char **args, t_shell *shell)
 		i++;
 	}
 	return (0);
+}
+
+void	add_or_update_env(t_shell *shell, char *key, char *value)
+{
+	t_env	*env;
+	t_env	*new;
+
+	env = shell->env;
+	while (env)
+	{
+		if (env->key && ft_strcmp(env->key, key) == 0)
+		{
+			free(env->var);
+			free(env->value);
+			env->value = ft_strdup(value);
+			env->var = ft_strjoin_three(env->key, "=", env->value);
+			return ;
+		}
+		env = env->next;
+	}
+	new = malloc(sizeof(t_env));
+	if (!new)
+		return ;
+	new->key = ft_strdup(key);
+	new->value = ft_strdup(value);
+	new->var = ft_strjoin_three(new->key, "=", new->value);
+	new->next = shell->env;
+	shell->env = new;
 }

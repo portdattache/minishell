@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 14:47:10 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/03/26 18:10:36 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/04/02 07:58:37 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "lib/libft.h"
 
-# define PROMPT "\033[31mminishell$> \033[0m"
+# define PROMPT "\033[1;32mminishell$> \033[0m"
 
 typedef struct s_env
 {
@@ -88,6 +88,8 @@ void				shell_node(t_shell *shell);
 t_pipex				*init_minishell_pipeline(t_cmd *cmd_list, t_shell *shell);
 t_pipex				*create_pipe_node(t_cmd *cmd, t_shell *shell);
 void				set_first_or_last(t_pipex *head);
+void				init_env_list(t_shell *shell, char **envp);
+void				init_env_list2(t_shell *shell);
 // void				pipe_execution(t_pipex *pipex);
 // t_pipex				*add_pipex_node(t_data *data);
 
