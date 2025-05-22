@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 19:06:08 by garside           #+#    #+#             */
-/*   Updated: 2025/05/17 16:48:53 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:44:43 by garside          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,9 @@ void	remove_from_list(t_env **list, char *name)
 
 int	ft_unset(t_data *data)
 {
-	int		i;
-	t_cmd	*cmd;
-
-	i = 0;
-	cmd = data->cmd_list;
+	int i = 0;
+	t_cmd *cmd = data->cmd_list;
+	
 	if (!cmd->args[1])
 		return (1);
 	while (cmd->args[i])

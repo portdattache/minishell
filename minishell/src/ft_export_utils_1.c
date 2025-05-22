@@ -3,30 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils_1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:05:40 by garside           #+#    #+#             */
-/*   Updated: 2025/05/17 16:55:00 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:17:47 by garside          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// condition dans la boucle while pour check les caracteres d'un id etait fausse (ft_isalnum&& == '_')
 int	ft_is_valid(char *str)
 {
 	int	i;
 
-	if (!str || !*str)
-		return (1);
 	i = 0;
 	if (!ft_isalpha(str[0]) && str[0] != '_')
-		return (1); /* 1 pour invalide */
-	i = 1;
+		return (1);
 	while (str[i])
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (1); /* 1 pour invalide */
+		if (ft_isalnum(str[i]) && str[i] == '_')
+			return (1);
 		i++;
 	}
 	return (0);
@@ -39,7 +35,7 @@ int	check_name(char *str, t_env *node, char *content)
 	current = node;
 	while (current)
 	{
-		if (ft_strcmp(current->name, str) == 0)
+		if (ft_strcmp (current->name, str) == 0)
 		{
 			if (content)
 			{

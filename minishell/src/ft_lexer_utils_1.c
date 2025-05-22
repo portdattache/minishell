@@ -3,20 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer_utils_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:49:50 by garside           #+#    #+#             */
-/*   Updated: 2025/05/17 17:32:44 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/05/11 16:47:01 by garside          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../includes/minishell.h" 
 
 void	free_one_token(t_token *token)
 {
-	if (token == NULL)
+	if (!token->value)
 		return ;
 	free(token->value);
+	if (!token)
+		return ;
 	free(token);
 }
 

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 02:51:50 by garside           #+#    #+#             */
-/*   Updated: 2025/05/17 16:54:00 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/05/16 04:13:07 by garside          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../includes/minishell.h" 
 
 void	command_not_found(char *cmd)
 {
