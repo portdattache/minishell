@@ -1,26 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_pipe_utils_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/17 18:19:19 by garside           #+#    #+#             */
-/*   Updated: 2025/05/23 11:49:04 by bcaumont         ###   ########.fr       */
+/*   Created: 2025/05/23 12:24:03 by bcaumont          #+#    #+#             */
+/*   Updated: 2025/05/23 12:24:31 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
-int	ft_pwd(void)
+int	manag_outfile(t_cmd *cmd, int *pipe_fd)
 {
-	char	cwd[1024];
+	int	out_fd;
 
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
+	if (cmd->outfile == NULL && cmd->next == NULL)
+		return (0);
+	if (cmd->outfile == NULL)
 	{
-		perror("pwd");
-		return (1);
+		if (pipe_fd[1] >= 0)
+			dup2(pipe_fd[1], 1);
+		return (0);
 	}
-	printf("%s\n", cwd);
+	out_fd = last_outfile(cmd);
+	if (out_fd == -1)
+	{
+		if (pipe_fd[1] >= 0)
+			dup2(pipe_fd[1], 1);
+		return (-1);
+	}
+	dup2(out_fd, 1);
+	close(out_fd);
 	return (0);
 }

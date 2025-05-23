@@ -18,10 +18,12 @@ OCTOLIB_A   = $(OCTOLIB_DIR)/libft.a
 # === SOURCES ===
 SRC         = src/find_cmd_path.c\
 			  src/ft_cd.c\
+			  src/ft_strjoin_three.c\
 			  src/ft_echo.c\
 			  src/ft_env.c\
    			  src/ft_exec_utils_1.c\
 			  src/ft_exec.c\
+			  src/ft_exec_1.c\
 			  src/ft_executables.c\
 			  src/ft_exit.c\
 			  src/ft_export_utils_1.c\

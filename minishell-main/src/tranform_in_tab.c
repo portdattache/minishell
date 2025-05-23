@@ -1,9 +1,21 @@
-#include "../includes/minishell.h"
-#include "../octolib/includes/libft.h" 
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tranform_in_tab.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/23 12:25:43 by bcaumont          #+#    #+#             */
+/*   Updated: 2025/05/23 12:25:44 by bcaumont         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int calcul_dynamique_len(t_env *tmp)
+#include "../includes/minishell.h"
+#include "../octolib/includes/libft.h"
+
+int	calcul_dynamique_len(t_env *tmp)
 {
-	int len_name;
+	int	len_name;
 	int	len_content;
 
 	len_name = ft_strlen(tmp->name);
@@ -11,7 +23,7 @@ int calcul_dynamique_len(t_env *tmp)
 	return (len_name + len_content + 2);
 }
 
-int size_list(t_env *tmp)
+int	size_list(t_env *tmp)
 {
 	int	count;
 
@@ -26,14 +38,14 @@ int size_list(t_env *tmp)
 
 char	**translate_in_tab(t_data *data)
 {
-	int	i;
-	int len;
-	char **envp;
-	char *line;
+	int		i;
+	int		len;
+	char	**envp;
+	char	*line;
 	t_env	*tmp;
+
 	i = 0;
 	tmp = data->env;
-		
 	i = size_list(tmp);
 	envp = malloc(sizeof(char *) * (i + 1));
 	if (!envp)
@@ -62,4 +74,3 @@ char	**translate_in_tab(t_data *data)
 	envp[i] = NULL;
 	return (envp);
 }
-

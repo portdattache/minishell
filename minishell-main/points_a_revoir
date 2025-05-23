@@ -1,0 +1,4 @@
+-lorsque l'on fais un cat puis que l'on interompt avec un ctrl+c, la cmd
+bloquante s'arrete, mais deux "minishell$>" se retrouve cote a cote en guise de
+nouveau prompt.
+

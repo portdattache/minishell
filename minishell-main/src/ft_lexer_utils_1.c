@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer_utils_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:49:50 by garside           #+#    #+#             */
-/*   Updated: 2025/05/11 16:47:01 by garside          ###   ########.fr       */
+/*   Updated: 2025/05/23 11:47:36 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h" 
+#include "../includes/minishell.h"
 
 void	free_one_token(t_token *token)
 {

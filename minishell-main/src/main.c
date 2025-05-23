@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:10 by garside           #+#    #+#             */
-/*   Updated: 2025/05/22 16:13:54 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/23 12:25:05 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,7 @@ void	read_prompt(t_data *data)
 		{
 			add_history(data->input);
 			if (parse(data) == 0)
-			{
-				// print_cmds(data->cmd_list);
 				data->last_status = exec_line(data, data->cmd_list);
-			}
 			if (data->cmd_list)
 				free_cmd_list(data);
 			if (data->token)

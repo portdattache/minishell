@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/05/22 17:54:00 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/23 12:11:31 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,5 +229,12 @@ char							*get_here_doc(char *str);
 
 void							disable_echoctl(void);
 int								ft_charnull(t_cmd *cmd);
+char							*ft_strjoin_three(char *s1, char *s2, char *s3);
+int								handle_single_command(t_data *data, t_cmd *cmd);
+pid_t							handle_pipeline(t_data *data, t_cmd *cmd);
+void							wait_for_pipeline(pid_t last_pid, t_data *data);
+int								init_pipe_if_needed(t_cmd *cmd);
+void							update_fds_after_process(t_cmd *cmd,
+									int *prev_fd);
 
 #endif
