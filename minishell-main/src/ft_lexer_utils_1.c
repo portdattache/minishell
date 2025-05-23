@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:49:50 by garside           #+#    #+#             */
-/*   Updated: 2025/05/23 11:47:36 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/23 13:50:06 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*handle_error_code(t_data *data, char *value, int *i)
 	char	*temp;
 
 	(*i) += 2;
-	tmp = ft_itoa(data->last_status);
+	tmp = ft_itoa(g_status);
 	temp = ft_strjoin(value, tmp);
 	free(tmp);
 	if (value)

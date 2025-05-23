@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:25:43 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/05/23 12:25:44 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/23 13:50:46 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,41 +36,56 @@ int	size_list(t_env *tmp)
 	return (count);
 }
 
-char	**translate_in_tab(t_data *data)
+static char	**alloc_envp_array(t_env *env)
 {
-	int		i;
-	int		len;
+	int		size;
 	char	**envp;
-	char	*line;
-	t_env	*tmp;
 
-	i = 0;
-	tmp = data->env;
-	i = size_list(tmp);
-	envp = malloc(sizeof(char *) * (i + 1));
+	size = size_list(env);
+	envp = malloc(sizeof(char *) * (size + 1));
 	if (!envp)
 	{
+		g_status = 1;
 		ft_putstr_fd("Error\n:allocation fail\n", 2);
 		return (NULL);
 	}
-	tmp = data->env;
+	return (envp);
+}
+
+static int	fill_envp_array(t_env *env, char **envp)
+{
+	int		i;
+	int		len;
+	char	*line;
+
 	i = 0;
-	while (tmp)
+	while (env)
 	{
-		len = calcul_dynamique_len(tmp);
+		len = calcul_dynamique_len(env);
 		line = malloc(len);
 		if (!line)
 		{
 			free_split(envp);
-			return (NULL);
+			return (0);
 		}
-		ft_strlcpy(line, tmp->name, len);
+		ft_strlcpy(line, env->name, len);
 		ft_strlcat(line, "=", len);
-		ft_strlcat(line, tmp->content, len);
-		envp[i] = line;
-		i++;
-		tmp = tmp->next;
+		ft_strlcat(line, env->content, len);
+		envp[i++] = line;
+		env = env->next;
 	}
 	envp[i] = NULL;
+	return (1);
+}
+
+char	**translate_in_tab(t_data *data)
+{
+	char	**envp;
+
+	envp = alloc_envp_array(data->env);
+	if (!envp)
+		return (NULL);
+	if (!fill_envp_array(data->env, envp))
+		return (NULL);
 	return (envp);
 }

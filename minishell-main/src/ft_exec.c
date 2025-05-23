@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:09:23 by garside           #+#    #+#             */
-/*   Updated: 2025/05/23 12:14:41 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/23 13:49:27 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ int	handle_single_command(t_data *data, t_cmd *cmd)
 		set_fd_cloexec(saved_stdout);
 		return (CODE_FAIL);
 	}
-	data->last_status = which_command(data, cmd, saved_stdin, saved_stdout);
+	g_status = which_command(data, cmd, saved_stdin, saved_stdout);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
 	close(saved_stdout);
-	return (data->last_status);
+	return (g_status);
 }

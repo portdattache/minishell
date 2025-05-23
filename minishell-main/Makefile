@@ -21,9 +21,9 @@ SRC         = src/find_cmd_path.c\
 			  src/ft_strjoin_three.c\
 			  src/ft_echo.c\
 			  src/ft_env.c\
-   			  src/ft_exec_utils_1.c\
 			  src/ft_exec.c\
 			  src/ft_exec_1.c\
+   			  src/ft_exec_utils_1.c\
 			  src/ft_executables.c\
 			  src/ft_exit.c\
 			  src/ft_export_utils_1.c\
@@ -32,10 +32,14 @@ SRC         = src/find_cmd_path.c\
 			  src/ft_lexer_utils_1.c\
 			  src/ft_lexer_utils_2.c\
 			  src/ft_lexer.c\
+			  src/ft_parce_util_1.c\
 			  src/ft_parce_util.c\
+			  src/ft_parse_1.c\
 			  src/ft_parse.c\
 			  src/ft_pipe_error.c\
+			  src/ft_pipe_utils_1.c\
 			  src/ft_pipe_utils.c\
+			  src/ft_pipe_1.c\
 			  src/ft_pipe.c\
 			  src/ft_pwd.c\
 			  src/ft_quote_utils_1.c\

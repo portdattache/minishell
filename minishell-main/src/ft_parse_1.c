@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:20:54 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/05/23 12:21:30 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/23 13:50:24 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	parse(t_data *data)
 		first = first->next;
 	if (first && first->type == 1)
 	{
-		data->last_status = 2;
+		g_status = 2;
 		printf("minishell: syntax error near unexpected token `|`\n");
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:13:30 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/05/23 12:14:11 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/23 13:48:50 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	wait_for_pipeline(pid_t last_pid, t_data *data)
 	while ((wpid = wait(&status)) > 0)
 	{
 		if (wpid == last_pid)
-			data->last_status = WEXITSTATUS(status);
+			g_status = WEXITSTATUS(status);
 	}
 }
 
@@ -36,7 +36,7 @@ int	exec_line(t_data *data, t_cmd *cmd)
 	wait_for_pipeline(last_pid, data);
 	if (cmd)
 		free_cmd_list(data);
-	return (data->last_status);
+	return (g_status);
 }
 
 int	init_pipe_if_needed(t_cmd *cmd)
