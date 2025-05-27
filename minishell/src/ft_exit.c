@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:11:06 by garside           #+#    #+#             */
-/*   Updated: 2025/05/27 14:07:33 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:07:09 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ static void	error_allnum(t_data *data, t_cmd *cmd)
 
 int	ft_exit(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 {
-	int	code;
-
 	if (!cmd->args[1])
 	{
 		close(fds->saved_stdin);

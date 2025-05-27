@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 21:27:48 by garside           #+#    #+#             */
-/*   Updated: 2025/05/27 14:12:08 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:19:24 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,13 @@ bool	is_builtin(char *cmd)
 
 int	redirect_management(t_cmd *cmd, t_exec_fd *fds)
 {
-	if (manag_infile(cmd) == 1)
+	if (manag_infile(cmd, fds) == -1)
 	{
 		safe_close(cmd->pipe_fd[0]);
 		safe_close(cmd->pipe_fd[1]);
 		return (1);
 	}
-	if (manag_outfile(cmd, cmd->pipe_fd) == 1)
+	if (manag_outfile(cmd, cmd->pipe_fd) == -1)
 	{
 		safe_close(cmd->pipe_fd[0]);
 		safe_close(cmd->pipe_fd[1]);
@@ -70,7 +70,7 @@ int	redirect_management(t_cmd *cmd, t_exec_fd *fds)
 	return (0);
 }
 
-int	run_builtin(t_data *data, t_cmd *cmd, int stdin, int stdout)
+int	run_builtin(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 {
 	if (!cmd->args || !cmd->args[0])
 		return (1);
@@ -81,7 +81,7 @@ int	run_builtin(t_data *data, t_cmd *cmd, int stdin, int stdout)
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
 		return (ft_env(data));
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
-		return (ft_exit(data, cmd, stdin, stdout));
+		return (ft_exit(data, cmd, fds));
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
 		return (ft_export(data));
 	else if (ft_strcmp(cmd->args[0], "pwd") == 0)

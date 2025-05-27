@@ -6,26 +6,26 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:22:54 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/05/27 09:20:22 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:08:43 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exec_child(t_data *data, t_cmd *cmd, int stdin, int stdout)
+void	exec_child(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 {
 	reset_signals_child();
 	signal(SIGPIPE, SIG_IGN);
 	dprintf(1, "je passe dans l'enfant\n");
-	if (redirect_management(cmd) == -1)
+	if (redirect_management(cmd, fds) == -1)
 		ft_exit_exec(1, data, cmd);
 	if (is_builtin(cmd->args[0]))
-		ft_exit_exec(run_builtin(data, cmd, stdin, stdout), data, cmd);
+		ft_exit_exec(run_builtin(data, cmd, fds), data, cmd);
 	g_status = handle_exec(data, cmd);
 	ft_exit_exec(127, data, cmd);
 }
 
-int	ft_process(t_data *data, t_cmd *cmd, int stdin, int stdout)
+int	ft_process(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 {
 	pid_t	pid;
 	int		ret;
@@ -41,7 +41,7 @@ int	ft_process(t_data *data, t_cmd *cmd, int stdin, int stdout)
 		return (CODE_FAIL);
 	}
 	if (pid == 0)
-		exec_child(data, cmd, stdin, stdout);
+		exec_child(data, cmd, fds);
 	if (cmd->path)
 	{
 		free(cmd->path);

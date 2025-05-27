@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:13:30 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/05/27 13:11:16 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:26:32 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,35 +57,35 @@ int	init_pipe_if_needed(t_cmd *cmd)
 	return (0);
 }
 
-void	update_fds_after_process(t_cmd *cmd)
+void	update_fds_after_process(t_cmd *cmd, t_exec_fd *fds)
 {
-	if (cmd->prev_fd != -1)
-		safe_close(cmd->prev_fd);
+	if (fds->prev_fd != -1)
+		safe_close(fds->prev_fd);
 	if (cmd->next)
 	{
 		safe_close(cmd->pipe_fd[1]);
-		cmd->prev_fd = cmd->pipe_fd[0];
+		fds->prev_fd = cmd->pipe_fd[0];
 	}
 	else
-		cmd->prev_fd = -1;
+		fds->prev_fd = -1;
 }
 
 pid_t	handle_pipeline(t_data *data, t_cmd *cmd)
 {
-	int		prev_fd;
-	pid_t	last_pid;
+	t_exec_fd	fds;
+	pid_t		last_pid;
 
-	prev_fd = -1;
+	fds.prev_fd = -1;
 	last_pid = -1;
 	while (cmd)
 	{
 		if (init_pipe_if_needed(cmd) == -1)
 			return (-1);
-		last_pid = ft_process(data, cmd, STDIN_FILENO, STDOUT_FILENO);
-		update_fds_after_process(cmd);
+		last_pid = ft_process(data, cmd, &fds);
+		update_fds_after_process(cmd, &fds);
 		cmd = cmd->next;
 	}
-	if (prev_fd != -1)
-		safe_close(prev_fd);
+	if (fds.prev_fd != -1)
+		safe_close(fds.prev_fd);
 	return (last_pid);
 }

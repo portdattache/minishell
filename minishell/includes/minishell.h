@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/05/27 14:12:24 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:26:55 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,9 +151,9 @@ char							*append_error_code(t_data *data, char *extract,
 char							*get_cmd_path(t_data *data, char **cmd);
 void							exec_child_process(t_data *data,
 									t_exec_fd *fds);
-int								ft_shell(t_data *data, int stdin, int stdout);
+int								ft_shell(t_data *data, t_exec_fd *fds);
 int								which_command(t_data *data, t_cmd *cmd,
-									int stdin, int stdout);
+									t_exec_fd *fds);
 int								exec_line(t_data *data, t_cmd *cmd);
 
 // parse
@@ -205,22 +205,22 @@ int								ft_unset(t_data *data);
 char							*find_cmd_path(char *cmd, t_data *data);
 
 // pipe
-int								ft_process(t_data *data, t_cmd *cmd, int stdin,
-									int stdout);
+int								ft_process(t_data *data, t_cmd *cmd,
+									t_exec_fd *fds);
 bool							is_builtin(char *cmd);
-void							exec_child(t_data *data, t_cmd *cmd, int stdin,
-									int stdout);
+void							exec_child(t_data *data, t_cmd *cmd,
+									t_exec_fd *fds);
 void							ft_exit_exec(int code, t_data *data,
 									t_cmd *cmd);
-int								run_builtin(t_data *data, t_cmd *cmd, int stdin,
-									int stdout);
+int								run_builtin(t_data *data, t_cmd *cmd,
+									t_exec_fd *fds);
 int								redirect_management(t_cmd *cmd, t_exec_fd *fds);
 void							safe_close(int fd);
 
 // pipe utils
 int								open_infile(char *str);
 int								last_infile(t_cmd *cmd);
-int								manag_infile(t_cmd *cmd);
+int								manag_infile(t_cmd *cmd, t_exec_fd *fds);
 int								open_outfile(char *file, t_TokenType mode);
 int								last_outfile(t_cmd *cmd);
 int								manag_outfile(t_cmd *cmd, int *pipe_fd);
@@ -245,7 +245,8 @@ int								handle_single_command(t_data *data, t_cmd *cmd);
 pid_t							handle_pipeline(t_data *data, t_cmd *cmd);
 void							wait_for_pipeline(pid_t last_pid, t_data *data);
 int								init_pipe_if_needed(t_cmd *cmd);
-void							update_fds_after_process(t_cmd *cmd);
+void							update_fds_after_process(t_cmd *cmd,
+									t_exec_fd *fds);
 int								handle_exec(t_data *data, t_cmd *cmd);
 int								prepare_cmd_path(t_data *data, t_cmd *cmd);
 void							print_cmd_redirs(t_cmd *cmd);

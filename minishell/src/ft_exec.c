@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:09:23 by garside           #+#    #+#             */
-/*   Updated: 2025/05/27 14:13:02 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:04:37 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,13 @@ int	which_command(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 int	handle_single_command(t_data *data, t_cmd *cmd)
 {
 	t_exec_fd	fds;
-	int			ret;
 
 	fds.prev_fd = -1;
 	fds.saved_stdin = dup(STDIN_FILENO);
 	fds.saved_stdout = dup(STDOUT_FILENO);
 	if (fds.saved_stdin < 0 || fds.saved_stdout < 0)
 		return (perror("dup"), CODE_FAIL);
-	if (redirect_management(cmd, fds.prev_fd) == -1)
+	if (redirect_management(cmd, &fds) == -1)
 	{
 		set_fd_cloexec(fds.saved_stdin);
 		set_fd_cloexec(fds.saved_stdout);

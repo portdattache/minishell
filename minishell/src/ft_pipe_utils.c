@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 01:28:30 by garside           #+#    #+#             */
-/*   Updated: 2025/05/27 12:59:58 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:11:22 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,16 @@ int	last_infile(t_cmd *cmd)
 	return (fd);
 }
 
-int	manag_infile(t_cmd *cmd)
+int	manag_infile(t_cmd *cmd, t_exec_fd *fds)
 {
 	int	in_fd;
 
-	if (cmd->infile == NULL && cmd->prev_fd == 0)
+	if (cmd->infile == NULL && fds->prev_fd == 0)
 		return (0);
-	if (cmd->infile == NULL && cmd->prev_fd != 0)
-		return (dup2(cmd->prev_fd, PIPE_READ), safe_close(cmd->prev_fd), 0);
-	if (cmd->prev_fd != 0)
-		safe_close(cmd->prev_fd);
+	if (cmd->infile == NULL && fds->prev_fd != 0)
+		return (dup2(fds->prev_fd, PIPE_READ), safe_close(fds->prev_fd), 0);
+	if (fds->prev_fd != 0)
+		safe_close(fds->prev_fd);
 	in_fd = last_infile(cmd);
 	if (in_fd == -1)
 		return (1);
