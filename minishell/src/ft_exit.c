@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:11:06 by garside           #+#    #+#             */
-/*   Updated: 2025/05/24 15:47:01 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:07:33 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,21 @@ static void	error_allnum(t_data *data, t_cmd *cmd)
 	ft_putstr_fd("exit: ", 1);
 	ft_putstr_fd(cmd->args[1], 1);
 	ft_putstr_fd(": numeric argument required\n", 1);
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
+	close(cmd->fds->saved_stdin);
+	close(cmd->fds->saved_stdout);
 	free_cmd_list(data);
 	free_data(data);
 	exit(2);
 }
 
-int	ft_exit(t_data *data, t_cmd *cmd, int stdin, int stdout)
+int	ft_exit(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 {
 	int	code;
 
 	if (!cmd->args[1])
 	{
-		close(stdin);
-		close(stdout);
+		close(fds->saved_stdin);
+		close(fds->saved_stdout);
 		free_cmd_list(data);
 		free_data(data);
 		ft_printf("exit\n");
@@ -55,12 +55,12 @@ int	ft_exit(t_data *data, t_cmd *cmd, int stdin, int stdout)
 		error_allnum(data, cmd);
 	else if (!cmd->args[1])
 		return (ft_putstr_fd("exit: too many arguments\n", 2), 1);
-	code = ft_atoi(cmd->args[1]);
-	close(stdin);
-	close(stdout);
+	g_status = ft_atoi(cmd->args[1]);
+	close(fds->saved_stdin);
+	close(fds->saved_stdout);
 	free_cmd_list(data);
 	free_data(data);
 	ft_printf("exit\n");
-	exit(code);
+	exit(g_status);
 	return (0);
 }

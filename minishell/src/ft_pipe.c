@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 21:27:48 by garside           #+#    #+#             */
-/*   Updated: 2025/05/24 15:12:01 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:12:08 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ bool	is_builtin(char *cmd)
 	return (false);
 }
 
-int	redirect_management(t_cmd *cmd)
+int	redirect_management(t_cmd *cmd, t_exec_fd *fds)
 {
 	if (manag_infile(cmd) == 1)
 	{

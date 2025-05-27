@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:09:23 by garside           #+#    #+#             */
-/*   Updated: 2025/05/24 12:36:54 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:13:02 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*get_cmd_path(t_data *data, char **cmd)
 	return (find_cmd_path(cmd[0], data));
 }
 
-int	ft_shell(t_data *data, int stdin, int stdout)
+int	ft_shell(t_data *data, t_exec_fd *fds)
 {
 	pid_t	pid;
 	int		status;
@@ -41,19 +41,19 @@ int	ft_shell(t_data *data, int stdin, int stdout)
 	if (pid == -1)
 		return (ft_putstr_fd("fork failed\n", 2), 1);
 	if (pid == 0)
-		exec_child_process(data, stdin, stdout);
+		exec_child_process(data, fds);
 	waitpid(pid, &status, 0);
 	return ((status >> 8) & 0xFF);
 }
 
-int	which_command(t_data *data, t_cmd *cmd, int stdin, int stdout)
+int	which_command(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 {
 	if (ft_strcmp(cmd->args[0], "export") == 0)
 		return (ft_export(data));
 	if (ft_strcmp(cmd->args[0], "unset") == 0)
 		return (ft_unset(data));
 	if (ft_strcmp(cmd->args[0], "exit") == 0)
-		return (ft_exit(data, cmd, stdin, stdout));
+		return (ft_exit(data, cmd, fds));
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
 		return (ft_echo(data, cmd));
 	if (ft_strcmp(cmd->args[0], "pwd") == 0)
@@ -63,29 +63,30 @@ int	which_command(t_data *data, t_cmd *cmd, int stdin, int stdout)
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
 		return (ft_cd(data));
 	if (ft_strncmp(cmd->args[0], "./", 2) == 0)
-		return (ft_executables(data, cmd, stdin, stdout));
-	return (ft_shell(data, stdin, stdout));
+		return (ft_executables(data, cmd, fds));
+	return (ft_shell(data, fds));
 }
 
 int	handle_single_command(t_data *data, t_cmd *cmd)
 {
-	int	saved_stdin;
-	int	saved_stdout;
+	t_exec_fd	fds;
+	int			ret;
 
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
-	if (saved_stdin < 0 || saved_stdout < 0)
+	fds.prev_fd = -1;
+	fds.saved_stdin = dup(STDIN_FILENO);
+	fds.saved_stdout = dup(STDOUT_FILENO);
+	if (fds.saved_stdin < 0 || fds.saved_stdout < 0)
 		return (perror("dup"), CODE_FAIL);
-	if (redirect_management(cmd) == 1)
+	if (redirect_management(cmd, fds.prev_fd) == -1)
 	{
-		set_fd_cloexec(saved_stdin);
-		set_fd_cloexec(saved_stdout);
+		set_fd_cloexec(fds.saved_stdin);
+		set_fd_cloexec(fds.saved_stdout);
 		return (CODE_FAIL);
 	}
-	g_status = which_command(data, cmd, saved_stdin, saved_stdout);
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdin);
-	close(saved_stdout);
+	g_status = which_command(data, cmd, &fds);
+	dup2(fds.saved_stdin, STDIN_FILENO);
+	dup2(fds.saved_stdout, STDOUT_FILENO);
+	close(fds.saved_stdin);
+	close(fds.saved_stdout);
 	return (g_status);
 }

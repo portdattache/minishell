@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 01:28:30 by garside           #+#    #+#             */
-/*   Updated: 2025/05/24 12:07:43 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:59:58 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,22 +57,16 @@ int	manag_infile(t_cmd *cmd)
 {
 	int	in_fd;
 
-	if (cmd->infile == NULL && cmd->prev_fd < 0)
+	if (cmd->infile == NULL && cmd->prev_fd == 0)
 		return (0);
-	if (cmd->infile == NULL && cmd->prev_fd >= 0)
-	{
-		dup2(cmd->prev_fd, 0);
-		close(cmd->prev_fd);
-		return (0);
-	}
-	if (cmd->prev_fd >= 0)
+	if (cmd->infile == NULL && cmd->prev_fd != 0)
+		return (dup2(cmd->prev_fd, PIPE_READ), safe_close(cmd->prev_fd), 0);
+	if (cmd->prev_fd != 0)
 		safe_close(cmd->prev_fd);
 	in_fd = last_infile(cmd);
 	if (in_fd == -1)
-		return (-1);
-	dup2(in_fd, 0);
-	close(in_fd);
-	return (0);
+		return (1);
+	return (dup2(in_fd, PIPE_READ), safe_close(in_fd), 0);
 }
 
 int	open_outfile(char *file, t_TokenType mode)

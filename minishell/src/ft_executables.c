@@ -6,13 +6,13 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 17:09:03 by garside           #+#    #+#             */
-/*   Updated: 2025/05/23 12:14:48 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:09:37 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_executables(t_data *data, t_cmd *cmd, int input_fd, int output_fd)
+int	ft_executables(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 {
 	struct stat	stat_info;
 	int			status;
@@ -30,15 +30,15 @@ int	ft_executables(t_data *data, t_cmd *cmd, int input_fd, int output_fd)
 			free_data(data);
 			exit(1);
 		}
-		if (input_fd != STDIN_FILENO)
+		if (fds->saved_stdin != STDIN_FILENO)
 		{
-			dup2(input_fd, STDIN_FILENO);
-			close(input_fd);
+			dup2(fds->saved_stdin, STDIN_FILENO);
+			close(fds->saved_stdin);
 		}
-		if (output_fd != STDOUT_FILENO)
+		if (fds->saved_stdout != STDOUT_FILENO)
 		{
-			dup2(output_fd, STDOUT_FILENO);
-			close(output_fd);
+			dup2(fds->saved_stdout, STDOUT_FILENO);
+			close(fds->saved_stdout);
 		}
 		if (stat(cmd->args[0], &stat_info) == 0)
 		{
@@ -61,15 +61,15 @@ int	ft_executables(t_data *data, t_cmd *cmd, int input_fd, int output_fd)
 	return ((status >> 8) & 0xFF);
 }
 
-void	exec_child_process(t_data *data, int stdin, int stdout)
+void	exec_child_process(t_data *data, t_exec_fd *fds)
 {
 	char	**cmd;
 	char	*path;
 
 	cmd = ft_get_cmd(data);
 	path = get_cmd_path(data, cmd);
-	close(stdin);
-	close(stdout);
+	close(fds->saved_stdin);
+	close(fds->saved_stdout);
 	if (!path)
 	{
 		ft_putstr_fd("minishell:", 2);

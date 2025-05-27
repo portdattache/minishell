@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/05/24 15:45:18 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:12:24 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define FAIL 1
 # define CODE_FAIL 1
 # define CODE_SUCCESS 0
+# define PIPE_READ 0
+# define PIPE_WRITE 1
 # define PROMPT "\033[1;32mminishell$> \033[0m"
 
 extern volatile sig_atomic_t	g_status;
@@ -61,6 +63,13 @@ typedef struct s_redir
 	struct s_redir				*next;
 }								t_redir;
 
+typedef struct s_exec_fd
+{
+	int							saved_stdin;
+	int							saved_stdout;
+	int							prev_fd;
+}								t_exec_fd;
+
 typedef struct s_cmd
 {
 	char						**args;
@@ -71,6 +80,7 @@ typedef struct s_cmd
 	int							here_doc_mode;
 	int							pipe_fd[2];
 	struct s_cmd				*next;
+	t_exec_fd					*fds;
 }								t_cmd;
 
 typedef struct s_data
@@ -139,8 +149,8 @@ char							*append_error_code(t_data *data, char *extract,
 
 // exec
 char							*get_cmd_path(t_data *data, char **cmd);
-void							exec_child_process(t_data *data, int stdin,
-									int stdout);
+void							exec_child_process(t_data *data,
+									t_exec_fd *fds);
 int								ft_shell(t_data *data, int stdin, int stdout);
 int								which_command(t_data *data, t_cmd *cmd,
 									int stdin, int stdout);
@@ -181,13 +191,13 @@ int								ft_pwd(void);
 int								ft_cd(t_data *data);
 int								ft_env(t_data *data);
 int								ft_echo(t_data *data, t_cmd *cmd);
-int								ft_exit(t_data *data, t_cmd *cmd, int stdin,
-									int stdout);
+int								ft_exit(t_data *data, t_cmd *cmd,
+									t_exec_fd *fds);
 int								ft_isalldigit(char *str);
 
 // ryew
 int								ft_executables(t_data *data, t_cmd *cmd,
-									int input_fd, int output_fd);
+									t_exec_fd *fds);
 int								ft_export(t_data *data);
 void							sort(char **tmp);
 t_env							*init_export_list(char **env);
@@ -204,7 +214,7 @@ void							ft_exit_exec(int code, t_data *data,
 									t_cmd *cmd);
 int								run_builtin(t_data *data, t_cmd *cmd, int stdin,
 									int stdout);
-int								redirect_management(t_cmd *cmd);
+int								redirect_management(t_cmd *cmd, t_exec_fd *fds);
 void							safe_close(int fd);
 
 // pipe utils
@@ -235,8 +245,7 @@ int								handle_single_command(t_data *data, t_cmd *cmd);
 pid_t							handle_pipeline(t_data *data, t_cmd *cmd);
 void							wait_for_pipeline(pid_t last_pid, t_data *data);
 int								init_pipe_if_needed(t_cmd *cmd);
-void							update_fds_after_process(t_cmd *cmd,
-									int *prev_fd);
+void							update_fds_after_process(t_cmd *cmd);
 int								handle_exec(t_data *data, t_cmd *cmd);
 int								prepare_cmd_path(t_data *data, t_cmd *cmd);
 void							print_cmd_redirs(t_cmd *cmd);

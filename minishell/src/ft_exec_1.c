@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:13:30 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/05/24 15:28:23 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 13:11:16 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,17 @@ int	init_pipe_if_needed(t_cmd *cmd)
 	return (0);
 }
 
-void	update_fds_after_process(t_cmd *cmd, int *prev_fd)
+void	update_fds_after_process(t_cmd *cmd)
 {
-	if (*prev_fd != -1)
-		safe_close(*prev_fd);
+	if (cmd->prev_fd != -1)
+		safe_close(cmd->prev_fd);
 	if (cmd->next)
 	{
 		safe_close(cmd->pipe_fd[1]);
-		*prev_fd = cmd->pipe_fd[0];
+		cmd->prev_fd = cmd->pipe_fd[0];
 	}
 	else
-		*prev_fd = -1;
+		cmd->prev_fd = -1;
 }
 
 pid_t	handle_pipeline(t_data *data, t_cmd *cmd)
@@ -82,7 +82,7 @@ pid_t	handle_pipeline(t_data *data, t_cmd *cmd)
 		if (init_pipe_if_needed(cmd) == -1)
 			return (-1);
 		last_pid = ft_process(data, cmd, STDIN_FILENO, STDOUT_FILENO);
-		update_fds_after_process(cmd, &prev_fd);
+		update_fds_after_process(cmd);
 		cmd = cmd->next;
 	}
 	if (prev_fd != -1)
