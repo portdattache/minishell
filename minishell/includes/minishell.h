@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/05/28 09:28:09 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:02:02 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,14 @@ typedef struct s_cmd
 typedef struct s_data
 {
 	char						*input;
+	char						**envp;
+	int							token_count;
+	int							last_status;
 	t_env						*env;
 	t_env						*export;
-	char						**envp;
 	t_token						*token;
 	t_cmd						*cmd_list;
 	t_exec_fd					fds;
-	int							token_count;
-	int							last_status;
 }								t_data;
 
 // signaux
@@ -265,5 +265,6 @@ void							add_pipe_node(t_cmd **curr);
 void							init_cmd_node(t_cmd **curr, t_cmd **head);
 void							add_redir(t_redir **redir_list, char *filename,
 									int type);
+void							init_data(t_data *data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:10 by garside           #+#    #+#             */
-/*   Updated: 2025/05/28 16:49:21 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:07:46 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+	init_data(&data);
 	data.envp = env;
 	data.env = init_env_list(env);
 	data.export = init_export_list(env);
