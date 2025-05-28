@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:45:06 by garside           #+#    #+#             */
-/*   Updated: 2025/05/23 11:49:45 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:27:46 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,4 @@ void	reset_signals_child(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-}
-
-void	disable_echoctl(void)
-{
-	struct termios	term;
-
-	if (tcgetattr(STDIN_FILENO, &term) == -1)
-	{
-		perror("tcgetattr");
-		exit(EXIT_FAILURE);
-	}
-	term.c_lflag &= ~ECHOCTL;
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
-	{
-		perror("tcsetattr");
-		exit(EXIT_FAILURE);
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:20:54 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/05/24 15:45:12 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:45:50 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,11 @@ int	check_tokens_validity(t_token *token)
 		return (1);
 	}
 	return (0);
+}
+
+void	init_fds(t_exec_fd *fds)
+{
+	fds->prev_fd = -1;
+	fds->saved_stdin = -1;
+	fds->saved_stdout = -1;
 }

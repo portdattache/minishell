@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:22:54 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/05/27 15:08:43 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:01:28 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	exec_child(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 {
 	reset_signals_child();
 	signal(SIGPIPE, SIG_IGN);
-	dprintf(1, "je passe dans l'enfant\n");
 	if (redirect_management(cmd, fds) == -1)
 		ft_exit_exec(1, data, cmd);
 	if (is_builtin(cmd->args[0]))

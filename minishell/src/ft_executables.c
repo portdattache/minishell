@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 17:09:03 by garside           #+#    #+#             */
-/*   Updated: 2025/05/27 14:09:37 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:26:51 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,77 +14,65 @@
 
 int	ft_executables(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 {
-	struct stat	stat_info;
-	int			status;
-	pid_t		pid;
+	pid_t	pid;
+	int		status;
 
 	pid = fork();
 	if (pid == -1)
 		return (ft_putstr_fd("fork failed\n", 2), 127);
 	if (pid == 0)
-	{
-		if (!cmd || !cmd->args || !cmd->args[0])
-		{
-			ft_putstr_fd("Error: invalid command or arguments\n", 2);
-			free_cmd_list(data);
-			free_data(data);
-			exit(1);
-		}
-		if (fds->saved_stdin != STDIN_FILENO)
-		{
-			dup2(fds->saved_stdin, STDIN_FILENO);
-			close(fds->saved_stdin);
-		}
-		if (fds->saved_stdout != STDOUT_FILENO)
-		{
-			dup2(fds->saved_stdout, STDOUT_FILENO);
-			close(fds->saved_stdout);
-		}
-		if (stat(cmd->args[0], &stat_info) == 0)
-		{
-			if (S_ISDIR(stat_info.st_mode))
-			{
-				is_a_directory(cmd->args[0]);
-				free_cmd_list(data);
-				free_data(data);
-				exit(126);
-			}
-		}
-		execve(cmd->args[0], cmd->args, data->envp);
-		ft_putstr_fd(cmd->args[0], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		free_cmd_list(data);
-		free_data(data);
-		exit(127);
-	}
+		ft_execve_child(data, cmd, fds);
 	waitpid(pid, &status, 0);
 	return ((status >> 8) & 0xFF);
 }
 
-void	exec_child_process(t_data *data, t_exec_fd *fds)
+void	ft_execve_child(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 {
-	char	**cmd;
-	char	*path;
-
-	cmd = ft_get_cmd(data);
-	path = get_cmd_path(data, cmd);
-	close(fds->saved_stdin);
-	close(fds->saved_stdout);
-	if (!path)
-	{
-		ft_putstr_fd("minishell:", 2);
-		ft_putstr_fd(data->token->value, 2);
-		ft_putstr_fd(": command not found\n", 2);
-		free_cmd_list(data);
-		free_data(data);
-		free_split(cmd);
-		exit(127);
-	}
-	execve(path, cmd, data->envp);
-	ft_putstr_fd("execve failed\n", 2);
+	if (!cmd || !cmd->args || !cmd->args[0])
+		ft_exit_with_error(data, cmd, "Error: invalid command or arguments\n",
+			1);
+	ft_restore_std(fds);
+	ft_check_directory(data, cmd);
+	execve(cmd->args[0], cmd->args, data->envp);
+	ft_putstr_fd(cmd->args[0], 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
 	free_cmd_list(data);
 	free_data(data);
-	free_split(cmd);
-	free(path);
 	exit(127);
+}
+
+void	ft_restore_std(t_exec_fd *fds)
+{
+	if (fds->saved_stdin != STDIN_FILENO)
+	{
+		dup2(fds->saved_stdin, STDIN_FILENO);
+		close(fds->saved_stdin);
+	}
+	if (fds->saved_stdout != STDOUT_FILENO)
+	{
+		dup2(fds->saved_stdout, STDOUT_FILENO);
+		close(fds->saved_stdout);
+	}
+}
+
+void	ft_check_directory(t_data *data, t_cmd *cmd)
+{
+	struct stat	stat_info;
+
+	if (stat(cmd->args[0], &stat_info) == 0 && S_ISDIR(stat_info.st_mode))
+	{
+		is_a_directory(cmd->args[0]);
+		free_cmd_list(data);
+		free_data(data);
+		exit(126);
+	}
+}
+
+void	ft_exit_with_error(t_data *data, t_cmd *cmd, char *msg, int code)
+{
+	(void)cmd;
+	ft_putstr_fd(msg, 2);
+	free_cmd_list(data);
+	free_data(data);
+	exit(code);
 }

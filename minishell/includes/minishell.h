@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/05/27 15:26:55 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/28 09:28:09 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ typedef struct s_data
 	char						**envp;
 	t_token						*token;
 	t_cmd						*cmd_list;
+	t_exec_fd					fds;
 	int							token_count;
 	int							last_status;
 }								t_data;
@@ -238,7 +239,6 @@ void							made_new_file(int *fd, char **name);
 void							fill_here_doc_file(int fd, char *delimitor);
 char							*get_here_doc(char *str);
 
-void							disable_echoctl(void);
 int								ft_charnull(t_cmd *cmd);
 char							*ft_strjoin_three(char *s1, char *s2, char *s3);
 int								handle_single_command(t_data *data, t_cmd *cmd);
@@ -253,5 +253,17 @@ void							print_cmd_redirs(t_cmd *cmd);
 void							print_cmd_args(char **args);
 void							print_cmds(t_cmd *cmd);
 int								check_tokens_validity(t_token *token);
+void							ft_execve_child(t_data *data, t_cmd *cmd,
+									t_exec_fd *fds);
+void							ft_restore_std(t_exec_fd *fds);
+void							ft_check_directory(t_data *data, t_cmd *cmd);
+void							ft_exit_with_error(t_data *data, t_cmd *cmd,
+									char *msg, int code);
+t_cmd							*handle_token(t_cmd *curr, t_token *token);
+void							init_fds(t_exec_fd *fds);
+void							add_pipe_node(t_cmd **curr);
+void							init_cmd_node(t_cmd **curr, t_cmd **head);
+void							add_redir(t_redir **redir_list, char *filename,
+									int type);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:18:56 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/05/24 15:42:47 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/28 09:27:06 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,57 +64,6 @@ void	add_redir(t_redir **redir_list, char *filename, int type)
 			tmp = tmp->next;
 		tmp->next = new_node;
 	}
-}
-
-t_cmd	*parse_tokens(t_data *data)
-{
-	t_cmd	*head;
-	t_cmd	*curr;
-	t_token	*token;
-
-	head = NULL;
-	curr = NULL;
-	token = data->token;
-	while (token)
-	{
-		if (!curr)
-		{
-			curr = new_cmd_node();
-			if (!head)
-				head = curr;
-		}
-		if (token->type == WORD)
-		{
-			add_arg(curr, token->value);
-		}
-		else if (token->type == REDIRECTION_IN && token->next)
-		{
-			add_redir(&curr->infile, token->next->value, REDIRECTION_IN);
-			token = token->next;
-		}
-		else if (token->type == REDIRECTION_OUT && token->next)
-		{
-			add_redir(&curr->outfile, token->next->value, REDIRECTION_OUT);
-			token = token->next;
-		}
-		else if (token->type == APPEND && token->next)
-		{
-			add_redir(&curr->outfile, token->next->value, APPEND);
-			token = token->next;
-		}
-		else if (token->type == HEREDOC && token->next)
-		{
-			add_redir(&curr->infile, token->next->value, HEREDOC);
-			token = token->next;
-		}
-		else if (token->type == PIPE)
-		{
-			curr->next = new_cmd_node();
-			curr = curr->next;
-		}
-		token = token->next;
-	}
-	return (head);
 }
 
 void	print_redirs(t_redir *redir)

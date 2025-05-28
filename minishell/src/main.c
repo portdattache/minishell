@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:10 by garside           #+#    #+#             */
-/*   Updated: 2025/05/23 13:50:37 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:45:06 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void	read_prompt(t_data *data)
 		if (data->input[0] && !check_quotes(data->input))
 		{
 			add_history(data->input);
+			init_fds(&data->fds);
 			if (parse(data) == 0)
 				g_status = exec_line(data, data->cmd_list);
 			if (data->cmd_list)
@@ -125,7 +126,6 @@ int	main(int ac, char **av, char **env)
 	data.env = init_env_list(env);
 	data.export = init_export_list(env);
 	init_signal();
-	disable_echoctl();
 	read_prompt(&data);
 	free_env_list(data.env);
 	free_env_list(data.export);

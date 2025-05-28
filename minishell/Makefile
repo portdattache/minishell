@@ -23,6 +23,7 @@ SRC         = src/find_cmd_path.c\
 			  src/ft_env.c\
 			  src/ft_exec.c\
 			  src/ft_exec_1.c\
+			  src/ft_exec_2.c\
    			  src/ft_exec_utils_1.c\
 			  src/ft_executables.c\
 			  src/ft_exit.c\
@@ -34,6 +35,7 @@ SRC         = src/find_cmd_path.c\
 			  src/ft_lexer.c\
 			  src/ft_parce_util_1.c\
 			  src/ft_parce_util.c\
+			  src/ft_parce_util_2.c\
 			  src/ft_parse_1.c\
 			  src/ft_parse.c\
 			  src/ft_pipe_error.c\
