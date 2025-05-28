@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 19:49:33 by garside           #+#    #+#             */
-/*   Updated: 2025/05/24 15:36:51 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:16:01 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,12 @@
 void	made_new_file(int *fd, char **name)
 {
 	static int	nb_file = 0;
+	char		*tmp_res;
 
-	*name = ft_strjoin("/tmp/here_doc_", ft_itoa(nb_file));
+	tmp_res = ft_itoa(nb_file);
+	*name = ft_strjoin("/tmp/here_doc_", tmp_res);
 	*fd = open(*name, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	free(tmp_res);
 	nb_file++;
 }
 
@@ -30,8 +33,8 @@ void	fill_here_doc_file(int fd, char *delimitor)
 		str = readline("> ");
 		if (str == NULL)
 		{
-			ft_printf("bash: warning: here-document delimited"\
-						" by end-of-file (wanted `%s')\n", \
+			ft_printf("bash: warning: here-document delimited"
+						" by end-of-file (wanted `%s')\n",
 						delimitor);
 			break ;
 		}
@@ -59,5 +62,6 @@ char	*get_here_doc(char *str)
 		return (ft_printf("error to create a tmp file\n"), NULL);
 	fill_here_doc_file(here_doc_fd, delimitor);
 	close(here_doc_fd);
+	free(delimitor);
 	return (file_name);
 }
