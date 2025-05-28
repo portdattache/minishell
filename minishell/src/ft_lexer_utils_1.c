@@ -6,48 +6,11 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:49:50 by garside           #+#    #+#             */
-/*   Updated: 2025/05/24 10:35:21 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:50:36 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	free_one_token(t_token *token)
-{
-	if (!token->value)
-		return ;
-	free(token->value);
-	if (!token)
-		return ;
-	free(token);
-}
-
-void	free_token(t_token *head)
-{
-	t_token	*tmp;
-
-	while (head != NULL)
-	{
-		tmp = head->next;
-		if (!head)
-			return ;
-		free_one_token(head);
-		head = tmp;
-	}
-}
-
-t_token	*new_token(char *value, t_TokenType type)
-{
-	t_token	*token;
-
-	token = malloc(sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->value = ft_strdup(value);
-	token->type = type;
-	token->next = NULL;
-	return (token);
-}
 
 char	*handle_error_code(t_data *data, char *value, int *i)
 {

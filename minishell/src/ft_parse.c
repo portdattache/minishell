@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:13:50 by garside           #+#    #+#             */
-/*   Updated: 2025/05/23 12:21:24 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:47:46 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,6 @@ t_env	*env_new(char *name, char *value)
 	new_env->next = NULL;
 	new_env->prev = NULL;
 	return (new_env);
-}
-
-void	free_env_list(t_env *new_list)
-{
-	t_env	*temp;
-
-	while (new_list)
-	{
-		temp = new_list;
-		new_list = new_list->next;
-		free(temp->name);
-		if (temp->content)
-			free(temp->content);
-		free(temp);
-	}
 }
 
 t_token	*get_next_token(t_data *data, int *i)

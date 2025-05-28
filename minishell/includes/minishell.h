@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/05/28 17:02:02 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:37:12 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,5 +266,6 @@ void							init_cmd_node(t_cmd **curr, t_cmd **head);
 void							add_redir(t_redir **redir_list, char *filename,
 									int type);
 void							init_data(t_data *data);
+void							free_redir_list(t_redir *redir);
 
 #endif

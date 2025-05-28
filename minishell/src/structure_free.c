@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_parce_util.c                                    :+:      :+:    :+:   */
+/*   structure_free.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 08:47:16 by garside           #+#    #+#             */
-/*   Updated: 2025/05/27 19:13:53 by bcaumont         ###   ########.fr       */
+/*   Created: 2025/05/28 17:19:30 by bcaumont          #+#    #+#             */
+/*   Updated: 2025/05/28 17:36:14 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_redir_list(t_redir *redir)
+void	free_split(char **tmp)
 {
-	t_redir	*tmp;
+	int	i;
 
-	while (redir)
+	i = 0;
+	if (tmp)
 	{
-		tmp = redir->next;
-		if (redir->file)
-			free(redir->file);
-		free(redir);
-		redir = tmp;
+		while (tmp[i])
+		{
+			free(tmp[i]);
+			tmp[i] = NULL;
+			i++;
+		}
+		free(tmp);
+		tmp = NULL;
 	}
 }
 
@@ -49,20 +53,33 @@ void	free_cmd_list(t_data *data)
 	data->cmd_list = NULL;
 }
 
-t_cmd	*new_cmd_node(void)
+void	free_redir_list(t_redir *redir)
 {
-	t_cmd	*cmd;
+	t_redir	*tmp;
 
-	cmd = malloc(sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->args = NULL;
-	cmd->path = NULL;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->next = NULL;
-	cmd->prev_fd = -1;
-	cmd->pipe_fd[0] = -1;
-	cmd->pipe_fd[1] = -1;
-	return (cmd);
+	while (redir)
+	{
+		tmp = redir->next;
+		if (redir->file)
+			free(redir->file);
+		free(redir);
+		redir = tmp;
+	}
+}
+
+void	free_data(t_data *data)
+{
+	if (!data)
+		return ;
+	free_env_list(data->env);
+	free_env_list(data->export);
+	free(data->input);
+	free_token(data->token);
+}
+
+void	free_name_content(char *name, char *content)
+{
+	free(name);
+	if (content)
+		free(content);
 }

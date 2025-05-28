@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:05:40 by garside           #+#    #+#             */
-/*   Updated: 2025/05/23 11:47:47 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:35:59 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,6 @@ int	check_name(char *str, t_env *node, char *content)
 		current = current->next;
 	}
 	return (0);
-}
-
-void	free_name_content(char *name, char *content)
-{
-	free(name);
-	if (content)
-		free(content);
 }
 
 char	*get_content(char *str, int i)

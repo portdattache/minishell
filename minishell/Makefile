@@ -18,6 +18,9 @@ OCTOLIB_A   = $(OCTOLIB_DIR)/libft.a
 # === SOURCES ===
 SRC         = src/find_cmd_path.c\
 			  src/ft_cd.c\
+			  src/structure_init.c\
+			  src/structure_free.c\
+			  src/structure_free_2.c\
 			  src/ft_strjoin_three.c\
 			  src/ft_echo.c\
 			  src/ft_env.c\
@@ -34,7 +37,6 @@ SRC         = src/find_cmd_path.c\
 			  src/ft_lexer_utils_2.c\
 			  src/ft_lexer.c\
 			  src/ft_parce_util_1.c\
-			  src/ft_parce_util.c\
 			  src/ft_parce_util_2.c\
 			  src/ft_parse_1.c\
 			  src/ft_parse.c\

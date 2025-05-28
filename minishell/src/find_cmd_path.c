@@ -6,27 +6,11 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:41:37 by garside           #+#    #+#             */
-/*   Updated: 2025/05/23 11:33:39 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:30:36 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	free_split(char **tmp)
-{
-	int	i;
-
-	i = 0;
-	if (tmp)
-	{
-		while (tmp[i])
-		{
-			free(tmp[i]);
-			i++;
-		}
-		free(tmp);
-	}
-}
 
 char	*try_paths(char **paths, char *cmd)
 {
