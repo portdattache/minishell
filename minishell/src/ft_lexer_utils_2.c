@@ -6,22 +6,11 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 13:10:25 by garside           #+#    #+#             */
-/*   Updated: 2025/05/23 11:47:40 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:59:46 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	is_skippable_char(char c)
-{
-	return (c && c != '|' && c != '<' && c != '>' && c != ' ' && c != '\t'
-		&& c != '\'' && c != '\"' && c != '$');
-}
-
-int	is_token_char(char c)
-{
-	return (c && c != '|' && c != '<' && c != '>' && c != ' ' && c != '\t');
-}
 
 char	*handle_env_value(t_data *data, int *i, char *value)
 {

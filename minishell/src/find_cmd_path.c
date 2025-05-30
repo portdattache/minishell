@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:41:37 by garside           #+#    #+#             */
-/*   Updated: 2025/05/28 17:30:36 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:55:28 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ char	*find_cmd_path(char *cmd, t_data *data)
 	char	**paths;
 	char	*cmd_path;
 
+	if (!cmd)
+		return (NULL);
 	if (cmd[0] == '/')
 	{
 		if (access(cmd, X_OK) != -1)

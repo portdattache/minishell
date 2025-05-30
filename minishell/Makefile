@@ -21,7 +21,8 @@ SRC         = src/find_cmd_path.c\
 			  src/structure_init.c\
 			  src/structure_free.c\
 			  src/structure_free_2.c\
-			  src/ft_strjoin_three.c\
+			  src/utils.c\
+			  src/print_error.c\
 			  src/ft_echo.c\
 			  src/ft_env.c\
 			  src/ft_exec.c\
@@ -40,9 +41,8 @@ SRC         = src/find_cmd_path.c\
 			  src/ft_parce_util_2.c\
 			  src/ft_parse_1.c\
 			  src/ft_parse.c\
-			  src/ft_pipe_error.c\
-			  src/ft_pipe_utils_1.c\
-			  src/ft_pipe_utils.c\
+			  src/ft_pipe_manage_infile.c\
+			  src/ft_pipe_manage_outfile.c\
 			  src/ft_pipe_1.c\
 			  src/ft_pipe.c\
 			  src/ft_pwd.c\
@@ -51,7 +51,7 @@ SRC         = src/find_cmd_path.c\
 			  src/main.c\
 			  src/signal.c\
 			  src/tranform_in_tab.c\
-			  src/unset.c\
+			  src/ft_unset.c\
 
 OBJ         = $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 

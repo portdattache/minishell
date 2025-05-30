@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/05/28 17:37:12 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:45:04 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define PIPE_READ 0
 # define PIPE_WRITE 1
 # define PROMPT "\033[1;32mminishell$> \033[0m"
+# define ERR_SYNT "minishell: syntax error near unexpected token"
 
 extern volatile sig_atomic_t	g_status;
 

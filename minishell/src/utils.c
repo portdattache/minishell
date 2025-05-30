@@ -1,16 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin_three.c                                 :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/06 17:12:41 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/05/28 17:10:49 by bcaumont         ###   ########.fr       */
+/*   Created: 2025/05/30 16:58:27 by bcaumont          #+#    #+#             */
+/*   Updated: 2025/05/30 17:00:12 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
+
+int	is_skippable_char(char c)
+{
+	return (c && c != '|' && c != '<' && c != '>' && c != ' ' && c != '\t'
+		&& c != '\'' && c != '\"' && c != '$');
+}
+
+int	is_token_char(char c)
+{
+	return (c && c != '|' && c != '<' && c != '>' && c != ' ' && c != '\t');
+}
 
 char	*ft_strjoin_three(char *s1, char *s2, char *s3)
 {

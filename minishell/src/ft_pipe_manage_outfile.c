@@ -1,72 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pipe_utils.c                                    :+:      :+:    :+:   */
+/*   ft_pipe_manage_file_1.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 01:28:30 by garside           #+#    #+#             */
-/*   Updated: 2025/05/27 15:11:22 by bcaumont         ###   ########.fr       */
+/*   Created: 2025/05/23 12:24:03 by bcaumont          #+#    #+#             */
+/*   Updated: 2025/05/30 17:01:59 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	open_infile(char *str)
+int	manag_outfile(t_cmd *cmd, int *pipe_fd)
 {
-	int	fd;
+	int	out_fd;
 
-	fd = open(str, O_RDONLY);
-	if (fd == -1)
-	{
-		if (access(str, F_OK) == -1)
-			no_such_file_or_directory(str);
-		else if (access(str, R_OK) == -1)
-			permission_denied(str);
-		else
-			error_message(str);
-	}
-	return (fd);
-}
-
-int	last_infile(t_cmd *cmd)
-{
-	int		fd;
-	t_redir	*infile;
-
-	cmd->prev_fd = -1;
-	infile = cmd->infile;
-	while (infile)
-	{
-		fd = open_infile(infile->file);
-		if (fd == -1)
-		{
-			if (cmd->prev_fd != -1)
-				safe_close(cmd->prev_fd);
-			return (-1);
-		}
-		if (cmd->prev_fd != -1)
-			safe_close(cmd->prev_fd);
-		cmd->prev_fd = fd;
-		infile = infile->next;
-	}
-	return (fd);
-}
-
-int	manag_infile(t_cmd *cmd, t_exec_fd *fds)
-{
-	int	in_fd;
-
-	if (cmd->infile == NULL && fds->prev_fd == 0)
+	if (cmd->outfile == NULL && cmd->next == NULL)
 		return (0);
-	if (cmd->infile == NULL && fds->prev_fd != 0)
-		return (dup2(fds->prev_fd, PIPE_READ), safe_close(fds->prev_fd), 0);
-	if (fds->prev_fd != 0)
-		safe_close(fds->prev_fd);
-	in_fd = last_infile(cmd);
-	if (in_fd == -1)
-		return (1);
-	return (dup2(in_fd, PIPE_READ), safe_close(in_fd), 0);
+	if (cmd->outfile == NULL)
+	{
+		if (pipe_fd[1] >= 0)
+			dup2(pipe_fd[1], 1);
+		return (0);
+	}
+	out_fd = last_outfile(cmd);
+	if (out_fd == -1)
+	{
+		if (pipe_fd[1] >= 0)
+			dup2(pipe_fd[1], 1);
+		return (-1);
+	}
+	dup2(out_fd, 1);
+	close(out_fd);
+	return (0);
 }
 
 int	open_outfile(char *file, t_TokenType mode)
