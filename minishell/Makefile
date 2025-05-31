@@ -1,6 +1,6 @@
 # === CONFIGURATION ===
 NAME        = minishell
-CC          = cc
+CC          = clang
 CFLAGS      = -Wall -Wextra -Werror -I includes/ -g3
 
 # === COULEURS ===
