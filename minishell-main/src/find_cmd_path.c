@@ -3,45 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   find_cmd_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:41:37 by garside           #+#    #+#             */
-/*   Updated: 2025/05/27 18:39:52 by garside          ###   ########.fr       */
+/*   Updated: 2025/06/01 22:01:02 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_split(char **tmp)
-{
-	int	i;
-
-	i = 0;
-	if (tmp)
-	{
-		while (tmp[i])
-		{
-			free(tmp[i]);
-			i++;
-		}
-		free(tmp);
-	}
-}
-
 char	*try_paths(char **paths, char *cmd)
 {
 	int		i;
-	char	*res;
 	char	*resfinal;
 
 	i = 0;
 	while (paths[i])
 	{
-		res = ft_strjoin(paths[i], "/");
-		if (!res)
-			return (NULL);
-		resfinal = ft_strjoin(res, cmd);
-		free(res);
+		resfinal = ft_strjoin_three(paths[i], "/", cmd);
 		if (!resfinal)
 		{
 			free_split(paths);

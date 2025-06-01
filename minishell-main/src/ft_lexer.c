@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:38:51 by garside           #+#    #+#             */
-/*   Updated: 2025/05/29 13:59:29 by garside          ###   ########.fr       */
+/*   Updated: 2025/06/01 21:48:10 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../includes/minishell.h"
 #include "../octolib/includes/libft.h"
-#include "../includes/minishell.h" 
 
 char	*handle_quotes_part(t_data *data, int *i, char *value)
 {
@@ -72,51 +72,45 @@ t_token	*handle_double_redir(char *input, int *i)
 	return (NULL);
 }
 
-t_token *handle_redirection(char *input, int *i)
+t_token	*handle_redirection(char *input, int *i)
 {
-	int		count;
-	char	type;
+	t_token	*token;
 
-	count = 0;
-	type = input[*i];
-	while (input[*i + count] == type)
-		count++;
-	if (count > 2)
+	token = handle_double_redir(input, i);
+	if (token)
+		return (token);
+	if (input[*i] == '>')
 	{
-		printf("%s '%c%c'\n", ERR_SYNT, type, type);
-		return (NULL);
+		(*i)++;
+		return (new_token(">", REDIRECTION_OUT));
 	}
-	if (count == 2)
+	if (input[*i] == '<')
 	{
-		if (type == '>')
-		{
-			*i += 2;
-			return (new_token(">>", APPEND));
-		}
-		else if (type == '<')
-		{
-			*i += 2;
-			return (new_token("<<", HEREDOC));
-		}
-	}
-	else if (count == 1)
-	{
-		if (type == '>')
-		{
-			*i += 1;
-			return (new_token(">", REDIRECTION_OUT));
-		}
-		else if (type == '<')
-		{
-			*i += 1;
-			return (new_token("<", REDIRECTION_IN));
-		}
+		(*i)++;
+		return (new_token("<", REDIRECTION_IN));
 	}
 	return (NULL);
 }
 
-void	skip_whitespace(const char *input, int *i)
+t_token	*ft_lexer(t_data *data)
 {
-	while (input[*i] == ' ' || input[*i] == '\t')
-		(*i)++;
+	int		i;
+	t_token	*head;
+	t_token	*last;
+	t_token	*current;
+
+	i = 0;
+	head = NULL;
+	last = NULL;
+	while (data->input[i])
+	{
+		skip_whitespace(data->input, &i);
+		if (!data->input[i])
+			break ;
+		current = get_next_token(data, &i);
+		if (!current)
+			return (NULL);
+		add_token_to_list(&head, &last, current);
+	}
+	return (head);
 }

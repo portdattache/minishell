@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils_1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:05:40 by garside           #+#    #+#             */
-/*   Updated: 2025/05/13 17:17:47 by garside          ###   ########.fr       */
+/*   Updated: 2025/06/01 22:03:51 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	check_name(char *str, t_env *node, char *content)
 	current = node;
 	while (current)
 	{
-		if (ft_strcmp (current->name, str) == 0)
+		if (ft_strcmp(current->name, str) == 0)
 		{
 			if (content)
 			{
@@ -48,13 +48,6 @@ int	check_name(char *str, t_env *node, char *content)
 		current = current->next;
 	}
 	return (0);
-}
-
-void	free_name_content(char *name, char *content)
-{
-	free(name);
-	if (content)
-		free(content);
 }
 
 char	*get_content(char *str, int i)

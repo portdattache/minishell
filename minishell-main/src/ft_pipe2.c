@@ -1,26 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_pipe2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/17 18:19:19 by garside           #+#    #+#             */
-/*   Updated: 2025/06/01 21:04:51 by bcaumont         ###   ########.fr       */
+/*   Created: 2025/06/01 19:58:33 by garside           #+#    #+#             */
+/*   Updated: 2025/06/01 21:04:50 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_pwd(void)
+void	safe_close(int fd)
 {
-	char	cwd[1024];
+	if (fd >= 0)
+		close(fd);
+}
 
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
+int	redirect_management(t_cmd *cmd, int prev_fd)
+{
+	if (manag_infile(cmd, prev_fd) == 1)
 	{
-		perror("pwd");
+		safe_close(cmd->pipe_fd[PIPE_READ]);
+		safe_close(cmd->pipe_fd[PIPE_WRITE]);
 		return (1);
 	}
-	printf("%s\n", cwd);
+	if (manag_outfile(cmd, cmd->pipe_fd) == 1)
+	{
+		safe_close(cmd->pipe_fd[PIPE_READ]);
+		safe_close(cmd->pipe_fd[PIPE_WRITE]);
+		return (1);
+	}
+	safe_close(cmd->pipe_fd[PIPE_READ]);
+	safe_close(cmd->pipe_fd[PIPE_WRITE]);
 	return (0);
 }
