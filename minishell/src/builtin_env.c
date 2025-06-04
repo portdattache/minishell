@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:35:45 by garside           #+#    #+#             */
-/*   Updated: 2025/06/03 17:02:23 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 11:14:37 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,21 @@ t_env	*env_new(char *name, char *value)
 	new_env->next = NULL;
 	new_env->prev = NULL;
 	return (new_env);
+}
+
+void	ft_replace_in_env(t_data *data, char *name, char *value)
+{
+	t_env	*i;
+
+	i = data->env;
+	while (i)
+	{
+		if (ft_strcmp(i->name, name) == 0)
+		{
+			free(i->content);
+			i->content = ft_strdup(value);
+			return ;
+		}
+		i = i->next;
+	}
 }

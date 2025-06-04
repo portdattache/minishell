@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 13:45:23 by garside           #+#    #+#             */
-/*   Updated: 2025/06/03 17:03:05 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 11:14:30 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,4 @@ char	**ft_get_cmd(t_data *data)
 	}
 	cmd[j] = NULL;
 	return (cmd);
-}
-
-void	ft_replace_in_env(t_data *data, char *name, char *value)
-{
-	t_env	*i;
-
-	i = data->env;
-	while (i)
-	{
-		if (ft_strcmp(i->name, name) == 0)
-		{
-			free(i->content);
-			i->content = ft_strdup(value);
-			return ;
-		}
-		i = i->next;
-	}
 }
