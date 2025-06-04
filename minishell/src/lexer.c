@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lexer.c                                         :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:38:51 by garside           #+#    #+#             */
-/*   Updated: 2025/06/03 17:13:24 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 12:35:02 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,20 +73,28 @@ t_token	*handle_double_redir(char *input, int *i)
 
 t_token	*handle_redirection(char *input, int *i)
 {
-	t_token	*token;
+	int		count;
+	char	type;
 
-	token = handle_double_redir(input, i);
-	if (token)
-		return (token);
-	if (input[*i] == '>')
+	count = 0;
+	type = input[*i];
+	while (input[*i + count] == type)
+		count++;
+	if (count > 2)
+		return (printf("%s '%c%c'\n", ERR_SYNT, type, type), NULL);
+	if (count == 2)
 	{
-		(*i)++;
-		return (new_token(">", REDIRECTION_OUT));
+		if (type == '>')
+			return (*i += 2, new_token(">>", APPEND));
+		else if (type == '<')
+			return (*i += 2, new_token("<<", HEREDOC));
 	}
-	if (input[*i] == '<')
+	else if (count == 1)
 	{
-		(*i)++;
-		return (new_token("<", REDIRECTION_IN));
+		if (type == '>')
+			return (*i += 1, new_token(">", REDIRECTION_OUT));
+		else if (type == '<')
+			return (*i += 1, new_token("<", REDIRECTION_IN));
 	}
 	return (NULL);
 }

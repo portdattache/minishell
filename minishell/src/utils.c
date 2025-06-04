@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 21:47:48 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/06/03 18:11:46 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 12:18:47 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,10 @@ int	is_skippable_char(char c)
 int	is_token_char(char c)
 {
 	return (c && c != '|' && c != '<' && c != '>' && c != ' ' && c != '\t');
+}
+
+void	safe_close(int fd)
+{
+	if (fd >= 0)
+		close(fd);
 }

@@ -32,14 +32,13 @@ SRC         = \
 	src/export_utils.c \
 	src/ft_lexer_utils_1.c \
 	src/ft_lexer_utils_2.c \
-	src/ft_parse.c \
-	src/ft_pipe2.c \
 	src/ft_quote.c \
 	src/ft_quote_utils_1.c \
 	src/get_cmd.c \
 	src/is_builtin.c \
 	src/lexer.c \
 	src/main.c \
+	src/parser.c \
 	src/parse_token.c \
 	src/path_finder.c \
 	src/path_utils.c \
