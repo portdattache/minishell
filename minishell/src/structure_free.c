@@ -6,29 +6,11 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 22:00:22 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/06/01 22:03:58 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:39:28 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	free_split(char **tmp)
-{
-	int	i;
-
-	i = 0;
-	if (tmp)
-	{
-		while (tmp[i])
-		{
-			free(tmp[i]);
-			tmp[i] = NULL;
-			i++;
-		}
-		free(tmp);
-		tmp = NULL;
-	}
-}
 
 void	free_cmd_list(t_data *data)
 {

@@ -6,14 +6,14 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/06/04 13:37:53 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 15:18:18 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// ========================== 🔹 DÉFINITIONS GÉNÉRALES =========================
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-// ========================== 🔹 DÉFINITIONS GÉNÉRALES =========================
 
 # include "../lib/libft.h"
 # define SUCCESS 0
@@ -27,7 +27,7 @@
 
 extern volatile sig_atomic_t	g_status;
 
-// ======================== 🧠 STRUCTURES DE DONNÉES ==========================
+// ======================== 🧠 STRUCTURES DE DONNÉES ===========================
 
 typedef enum e_token_type
 {
@@ -82,107 +82,116 @@ typedef struct s_data
 	char						**envp;
 	t_token						*token;
 	t_cmd						*cmd_list;
+	int							last_status;
 	int							token_count;
 }								t_data;
 
-// ============================ 🧩 LEXING =====================================
+// ======================== 🧠 INITIALISATION DES DONNÉES ======================
+
+t_env							*init_export_list(char **env);
+t_env							*init_env_list(char **env);
+void							init_data(t_data *data);
+t_token							*new_token(char *value, t_TokenType type);
+t_cmd							*new_cmd_node(void);
+void							add_redir(t_redir **redir_list, char *filename,
+									int type);
+
+// ======================= 🔧 SIGNALS & SHELL MGMT =============================
+
+void							reset_signals_child(void);
+void							handle_sigint(int sig);
+void							init_signal(void);
+
+// ============================ 🧩 LEXING ======================================
 
 t_token							*ft_lexer(t_data *data);
 t_token							*get_next_token(t_data *data, int *i);
-t_token							*new_token(char *value, t_TokenType type);
-t_token							*handle_cmd_or_arg(t_data *data, int *i);
+t_env							*env_new(char *name, char *value);
+char							*change_env(t_data *data, int *i);
+char							*extract_word_double(t_data *data, int *i);
+char							*extract_word_single(char *input, int *i);
+int								check_quotes(char *input);
+int								is_token_char(char c);
 t_token							*handle_pipe(int *i);
-t_token							*handle_redirection(char *input, int *i);
+t_token							*handle_cmd_or_arg(t_data *data, int *i);
 t_token							*handle_double_redir(char *input, int *i);
-char							*handle_quotes_part(t_data *data, int *i,
-									char *value);
+t_token							*handle_redirection(char *input, int *i);
+char							*handle_quotes(t_data *data, int *i);
 char							*handle_env_value(t_data *data, int *i,
+									char *value);
+char							*handle_quotes_part(t_data *data, int *i,
 									char *value);
 char							*handle_plain_text(t_data *data, int *i,
 									char *value);
-char							*handle_quotes(t_data *data, int *i);
-void							skip_whitespace(const char *input, int *i);
-int								is_token_char(char c);
-int								is_skippable_char(char c);
+char							*append_env_variable(t_data *data,
+									char *extract, int *i, int *first);
+char							*append_remaining_segment(t_data *data,
+									char *extract, int first, int i);
 
-// ============================ 🧪 PARSING ====================================
+// ============================ 🧪 PARSING =====================================
 
 int								parse(t_data *data);
 t_cmd							*parse_tokens(t_data *data);
 void							add_arg(t_cmd *cmd, char *value);
-t_cmd							*new_cmd_node(void);
-void							add_token_to_list(t_token **head,
-									t_token **last, t_token *new);
 
-// ============================ 🛠️ EXECUTION =================================
+void							add_token_to_list(t_token **head,
+									t_token **last, t_token *new_token);
+
+// ============================ 🛠️ EXECUTION ==================================
 
 int								exec_line(t_data *data, t_cmd *cmd);
+void							ft_restore_std(int input_fd, int output_fd);
+void							handle_direct_exec(t_data *data, t_cmd *cmd);
+void							handle_path_exec(t_data *data, t_cmd *cmd);
+int								wait_for_children(pid_t last_pid);
+void							maybe_close(t_cmd *cmd, int *prev_fd);
+char							**ft_get_cmd(t_data *data);
+int								resolve_command_path(t_data *data, t_cmd *cmd);
+char							*get_cmd_path(t_data *data, char **cmd);
+int								ft_shell(t_data *data, t_cmd *cmd, int prev_fd);
+int								exec_child_process(t_data *data, t_cmd *cmd,
+									int prev_fd);
+int								which_command(t_data *data, t_cmd *cmd,
+									int prev_fd);
 int								handle_single_command(t_data *data, t_cmd *cmd,
 									int prev_fd);
 void							handle_useless_command(t_cmd *cmd,
 									int *prev_fd);
-int								wait_for_children(pid_t last_pid);
-void							maybe_close(t_cmd *cmd, int *prev_fd);
 void							exec_child(t_data *data, t_cmd *cmd,
 									int prev_fd);
-int								which_command(t_data *data, t_cmd *cmd,
-									int prev_fd);
-int								resolve_command_path(t_data *data, t_cmd *cmd);
-int								ft_process(t_data *data, t_cmd *cmd,
-									int prev_fd);
-int								exec_child_process(t_data *data, t_cmd *cmd,
-									int prev_fd);
-int								ft_shell(t_data *data, t_cmd *cmd, int prev_fd);
-void							handle_path_exec(t_data *data, t_cmd *cmd);
-void							handle_direct_exec(t_data *data, t_cmd *cmd);
-void							ft_execve_child(t_data *data, t_cmd *cmd,
-									int input_fd, int output_fd);
-void							ft_restore_std(int input_fd, int output_fd);
-void							ft_check_directory(t_data *data, t_cmd *cmd);
-void							ft_exit_with_error(t_data *data, t_cmd *cmd,
-									char *msg, int code);
-void							ft_exit_exec(int code, t_data *data,
-									t_cmd *cmd);
-int								run_builtin(t_data *data, t_cmd *cmd);
 int								ft_executables(t_data *data, t_cmd *cmd,
 									int input_fd, int output_fd);
+int								ft_process(t_data *data, t_cmd *cmd,
+									int prev_fd);
+void							ft_execve_child(t_data *data, t_cmd *cmd,
+									int input_fd, int output_fd);
 
-// ============================ 📦 BUILTINS ===================================
+// ============================ 📦 BUILTINS ====================================
 
+bool							is_builtin(char *cmd);
+int								run_builtin(t_data *data, t_cmd *cmd);
 int								ft_pwd(void);
 int								ft_cd(t_data *data);
 int								ft_env(t_data *data);
 int								ft_echo(t_data *data, t_cmd *cmd);
-int								ft_exit(t_data *data, t_cmd *cmd, int stdin,
-									int stdout);
-int								ft_isalldigit(char *str);
 int								ft_export(t_data *data);
 int								ft_unset(t_data *data);
-bool							is_builtin(char *cmd);
-
-// ========================== 🌐 ENVIRONNEMENT ================================
-
-t_env							*env_new(char *name, char *value);
-t_env							*init_env_list(char **env);
-t_env							*init_export_list(char **env);
-void							ft_replace_in_env(t_data *data, char *name,
-									char *value);
-void							ft_lstadd_back_env(t_env **lst, t_env *new);
-char							**translate_in_tab(t_data *data);
-int								calcul_dynamique_len(t_env *tmp);
-char							*ft_get_env(char *str, t_data *data);
+int								ft_isalldigit(char *str);
 void							sort(char **tmp);
+char							*find_cmd_path(char *cmd, t_data *data);
+int								ft_exit(t_data *data, t_cmd *cmd, int stdin,
+									int stdout);
 
 // ====================== 📁 REDIRECTIONS & FICHIERS ==========================
 
-int								open_infile(char *str);
-int								open_outfile(char *file, t_TokenType mode);
-int								last_infile(t_cmd *cmd);
-int								last_outfile(t_cmd *cmd);
 int								manag_infile(t_cmd *cmd, int prev_fd);
+int								open_infile(char *str);
+int								last_infile(t_cmd *cmd);
 int								manag_outfile(t_cmd *cmd, int *pipe_fd);
+int								open_outfile(char *file, t_TokenType mode);
+int								last_outfile(t_cmd *cmd);
+void							safe_close(int fd);
 int								redirect_management(t_cmd *cmd, int prev_fd);
-int								set_fd_cloexec(int fd);
 
 // ============================ 🐚 HERE-DOC ===================================
 
@@ -190,52 +199,55 @@ void							made_new_file(int *fd, char **name);
 void							fill_here_doc_file(int fd, char *delimitor);
 char							*get_here_doc(char *str);
 
-// ============================= ⚠️ ERREURS ==================================
-
-void							command_not_found(char *cmd);
-void							no_such_file_or_directory(char *cmd);
-void							permission_denied(char *file);
-void							error_message(char *str);
-void							is_a_directory(char *str);
-char							*check_direct_access(char *cmd);
-void							print_cmd_error(char *cmd);
-
 // ============================ 📊 UTILITAIRES ================================
 
+void							skip_whitespace(const char *input, int *i);
+int								is_skippable_char(char c);
 char							*ft_strjoin_three(char *s1, char *s2, char *s3);
 char							*try_paths(char **paths, char *cmd);
-char							*get_cmd_path(t_data *data, char **cmd);
-char							*change_env(t_data *data, int *i);
-char							*append_env_variable(t_data *data,
-									char *extract, int *i, int *first);
-char							*append_remaining_segment(t_data *data,
-									char *extract, int first, int i);
-char							*extract_word_double(t_data *data, int *i);
-char							*extract_word_single(char *input, int *i);
-char							*handle_error_code(t_data *data, char *value,
-									int *i);
+void							ft_check_directory(t_data *data, t_cmd *cmd);
+void							ft_lstadd_back_env(t_env **lst, t_env *new);
+char							**translate_in_tab(t_data *data);
+int								calcul_dynamique_len(t_env *tmp);
+void							ft_lstadd_back_env(t_env **lst, t_env *new);
+char							*check_direct_access(char *cmd);
 char							*get_content(char *str, int i);
 int								ft_is_valid(char *str);
+void							ft_replace_in_env(t_data *data, char *name,
+									char *value);
 int								check_name(char *str, t_env *node,
 									char *content);
-void							free_name_content(char *name, char *content);
 
-// ======================= 🔧 SIGNALS & SHELL MGMT ============================
+// ============================= ⚠️ ERREURS ====================================
 
-void							init_signal(void);
-void							handle_sigint(int sig);
-void							reset_signals_child(void);
-void							init_data(t_data *data);
+void							print_cmd_error(char *cmd);
+void							is_a_directory(char *str);
+void							no_such_file_or_directory(char *cmd);
+void							command_not_found(char *cmd);
+void							permission_denied(char *file);
+void							error_message(char *str);
 void							is_not_path(t_data *data);
+char							*ft_get_env(char *str, t_data *data);
+void							handle_invalid_command(t_data *data, t_cmd *cmd,
+									int prev_fd);
+char							*handle_error_code(t_data *data, char *value,
+									int *i);
+char							*append_error_code(t_data *data, char *extract,
+									int *i, int *first);
 
-// =========================== 🧹 LIBÉRATION MEMOIRE ==========================
+// =========================== 🧹 FREE MEMORY & EXIT ===========================
 
-void							free_split(char **tmp);
 void							free_env_list(t_env *new_list);
 void							free_redir_list(t_redir *redir);
-void							free_cmd_list(t_data *data);
-void							free_token(t_token *head);
 void							free_one_token(t_token *token);
+void							free_token(t_token *head);
+void							free_split(char **split);
+void							free_name_content(char *name, char *content);
+void							free_cmd_list(t_data *data);
 void							free_data(t_data *data);
+void							ft_exit_exec(int code, t_data *data,
+									t_cmd *cmd);
+void							ft_exit_with_error(t_data *data, t_cmd *cmd,
+									char *msg, int code);
 
 #endif

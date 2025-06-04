@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 22:04:16 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/06/01 22:07:18 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 15:17:57 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,21 @@ void	free_token(t_token *head)
 		free_one_token(head);
 		head = tmp;
 	}
+}
+
+void	free_split(char **split)
+{
+	int	i;
+
+	if (!split)
+		return ;
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		split[i] = NULL;
+		i++;
+	}
+	free(split);
+	split = NULL;
 }

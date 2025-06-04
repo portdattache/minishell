@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 22:07:49 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/06/01 23:56:49 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:35:31 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	init_data(t_data *data)
 	data->token = NULL;
 	data->cmd_list = NULL;
 	data->token_count = 0;
+	data->last_status = 0;
 }
 
 t_cmd	*new_cmd_node(void)
