@@ -30,13 +30,10 @@ SRC         = \
 	src/execution.c \
 	src/execution_utils.c \
 	src/export_utils.c \
-	src/ft_lexer_utils_1.c \
-	src/ft_lexer_utils_2.c \
-	src/ft_quote.c \
-	src/ft_quote_utils_1.c \
 	src/get_cmd.c \
 	src/is_builtin.c \
 	src/lexer.c \
+	src/lexer_util.c \
 	src/main.c \
 	src/parser.c \
 	src/parse_token.c \
@@ -49,6 +46,8 @@ SRC         = \
 	src/pipe_outfile_manager.c \
 	src/pipe_redirection.c \
 	src/print_errors.c \
+	src/quote_gestion.c \
+	src/quote_gestion_utils.c \
 	src/signals.c \
 	src/structure_free_2.c \
 	src/structure_free.c \
