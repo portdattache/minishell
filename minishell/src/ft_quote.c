@@ -6,12 +6,11 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:38:39 by garside           #+#    #+#             */
-/*   Updated: 2025/05/31 15:33:18 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/03 17:59:56 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../octolib/includes/libft.h"
 
 char	*append_env_variable(t_data *data, char *extract, int *i, int *first)
 {

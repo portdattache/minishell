@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/28 17:19:30 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/05/28 17:36:14 by bcaumont         ###   ########.fr       */
+/*   Created: 2025/06/01 22:00:22 by bcaumont          #+#    #+#             */
+/*   Updated: 2025/06/01 22:03:58 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	free_redir_list(t_redir *redir)
 	while (redir)
 	{
 		tmp = redir->next;
+		if (redir->type == HEREDOC && redir->file)
+			unlink(redir->file);
 		if (redir->file)
 			free(redir->file);
 		free(redir);

@@ -5,22 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/30 16:58:27 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/05/30 17:00:12 by bcaumont         ###   ########.fr       */
+/*   Created: 2025/06/01 21:47:48 by bcaumont          #+#    #+#             */
+/*   Updated: 2025/06/03 18:11:46 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	is_skippable_char(char c)
+void	skip_whitespace(const char *input, int *i)
 {
-	return (c && c != '|' && c != '<' && c != '>' && c != ' ' && c != '\t'
-		&& c != '\'' && c != '\"' && c != '$');
-}
-
-int	is_token_char(char c)
-{
-	return (c && c != '|' && c != '<' && c != '>' && c != ' ' && c != '\t');
+	while (input[*i] == ' ' || input[*i] == '\t')
+		(*i)++;
 }
 
 char	*ft_strjoin_three(char *s1, char *s2, char *s3)
@@ -36,4 +31,15 @@ char	*ft_strjoin_three(char *s1, char *s2, char *s3)
 	result = ft_strjoin(tmp, s3);
 	free(tmp);
 	return (result);
+}
+
+int	is_skippable_char(char c)
+{
+	return (c && c != '|' && c != '<' && c != '>' && c != ' ' && c != '\t'
+		&& c != '\'' && c != '\"' && c != '$');
+}
+
+int	is_token_char(char c)
+{
+	return (c && c != '|' && c != '<' && c != '>' && c != ' ' && c != '\t');
 }

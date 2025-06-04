@@ -6,29 +6,11 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:13:50 by garside           #+#    #+#             */
-/*   Updated: 2025/05/28 17:47:46 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/03 17:15:59 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../octolib/includes/libft.h"
-
-t_env	*env_new(char *name, char *value)
-{
-	t_env	*new_env;
-
-	new_env = malloc(sizeof(t_env));
-	if (!new_env)
-		return (NULL);
-	new_env->name = ft_strdup(name);
-	if (value)
-		new_env->content = ft_strdup(value);
-	else
-		new_env->content = NULL;
-	new_env->next = NULL;
-	new_env->prev = NULL;
-	return (new_env);
-}
 
 t_token	*get_next_token(t_data *data, int *i)
 {
@@ -39,35 +21,63 @@ t_token	*get_next_token(t_data *data, int *i)
 	return (handle_cmd_or_arg(data, i));
 }
 
-t_token	*ft_lexer(t_data *data)
+int	valid_parse(t_data *data)
 {
-	int		i;
-	t_token	*head;
-	t_token	*last;
-	t_token	*current;
+	t_token	*tmp;
 
-	i = 0;
-	head = NULL;
-	last = NULL;
-	while (data->input[i])
+	tmp = data->token;
+	while (tmp)
 	{
-		skip_whitespace(data->input, &i);
-		if (!data->input[i])
-			break ;
-		current = get_next_token(data, &i);
-		if (!current)
-			return (NULL);
-		add_token_to_list(&head, &last, current);
+		if (tmp->type != WORD && !tmp->next && tmp->type != PIPE)
+		{
+			g_status = 2;
+			return (printf("%s `newline`\n", ERR_SYNT), 1);
+		}
+		if (tmp->type == PIPE && tmp->next && tmp->next->type == PIPE)
+		{
+			g_status = 2;
+			return (printf("%s `|`\n", ERR_SYNT), 1);
+		}
+		if ((tmp->type != WORD && tmp->type != PIPE) && (tmp->next
+				&& tmp->next->type != WORD))
+		{
+			g_status = 2;
+			return (printf("%s `%s`\n", ERR_SYNT, tmp->next->value), 1);
+		}
+		tmp = tmp->next;
 	}
-	return (head);
+	return (0);
 }
 
-void	print_tokens(t_data *data)
+static void	print_pipe_error(void)
 {
-	while (data->token)
-	{
-		printf("token value: %s type %d\n", data->token->value,
-			data->token->type);
-		data->token = data->token->next;
-	}
+	g_status = 2;
+	printf("%s `|'\n", ERR_SYNT);
+}
+
+int	parse(t_data *data)
+{
+	t_token	*token;
+
+	if (!data->input)
+		return (1);
+	data->token = ft_lexer(data);
+	if (!data->token)
+		return (1);
+	token = data->token;
+	if (valid_parse(data) == 1)
+		return (1);
+	if (token->type == PIPE)
+		return (printf("%s `|'\n", ERR_SYNT), 1);
+	while (token && token->next)
+		token = token->next;
+	if (token->type == PIPE)
+		return (print_pipe_error(), 1);
+	data->cmd_list = parse_tokens(data);
+	if (!data->cmd_list)
+		return (1);
+	if (!data->cmd_list->args && !data->cmd_list->outfile
+		&& !data->cmd_list->infile)
+		return (1);
+	return (0);
 }

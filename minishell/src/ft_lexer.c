@@ -6,12 +6,11 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:38:51 by garside           #+#    #+#             */
-/*   Updated: 2025/05/23 11:48:03 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/03 17:13:24 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../octolib/includes/libft.h"
 
 char	*handle_quotes_part(t_data *data, int *i, char *value)
 {
@@ -92,8 +91,25 @@ t_token	*handle_redirection(char *input, int *i)
 	return (NULL);
 }
 
-void	skip_whitespace(const char *input, int *i)
+t_token	*ft_lexer(t_data *data)
 {
-	while (input[*i] == ' ' || input[*i] == '\t')
-		(*i)++;
+	int		i;
+	t_token	*head;
+	t_token	*last;
+	t_token	*current;
+
+	i = 0;
+	head = NULL;
+	last = NULL;
+	while (data->input[i])
+	{
+		skip_whitespace(data->input, &i);
+		if (!data->input[i])
+			break ;
+		current = get_next_token(data, &i);
+		if (!current)
+			return (NULL);
+		add_token_to_list(&head, &last, current);
+	}
+	return (head);
 }

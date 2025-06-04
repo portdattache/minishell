@@ -6,13 +6,13 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 17:09:03 by garside           #+#    #+#             */
-/*   Updated: 2025/05/28 17:16:24 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/03 17:06:51 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_executables(t_data *data, t_cmd *cmd, t_exec_fd *fds)
+int	ft_executables(t_data *data, t_cmd *cmd, int input_fd, int output_fd)
 {
 	pid_t	pid;
 	int		status;
@@ -21,17 +21,17 @@ int	ft_executables(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 	if (pid == -1)
 		return (ft_putstr_fd("fork failed\n", 2), 127);
 	if (pid == 0)
-		ft_execve_child(data, cmd, fds);
+		ft_execve_child(data, cmd, input_fd, output_fd);
 	waitpid(pid, &status, 0);
 	return ((status >> 8) & 0xFF);
 }
 
-void	ft_execve_child(t_data *data, t_cmd *cmd, t_exec_fd *fds)
+void	ft_execve_child(t_data *data, t_cmd *cmd, int input_fd, int output_fd)
 {
 	if (!cmd || !cmd->args || !cmd->args[0])
 		ft_exit_with_error(data, cmd, "Error: invalid command or arguments\n",
 			1);
-	ft_restore_std(fds);
+	ft_restore_std(input_fd, output_fd);
 	ft_check_directory(data, cmd);
 	execve(cmd->args[0], cmd->args, data->envp);
 	ft_putstr_fd(cmd->args[0], 2);
@@ -41,17 +41,17 @@ void	ft_execve_child(t_data *data, t_cmd *cmd, t_exec_fd *fds)
 	exit(127);
 }
 
-void	ft_restore_std(t_exec_fd *fds)
+void	ft_restore_std(int input_fd, int output_fd)
 {
-	if (fds->saved_stdin != STDIN_FILENO)
+	if (input_fd != STDIN_FILENO)
 	{
-		dup2(fds->saved_stdin, STDIN_FILENO);
-		close(fds->saved_stdin);
+		dup2(input_fd, STDIN_FILENO);
+		close(input_fd);
 	}
-	if (fds->saved_stdout != STDOUT_FILENO)
+	if (output_fd != STDOUT_FILENO)
 	{
-		dup2(fds->saved_stdout, STDOUT_FILENO);
-		close(fds->saved_stdout);
+		dup2(output_fd, STDOUT_FILENO);
+		close(output_fd);
 	}
 }
 

@@ -6,29 +6,22 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/05/30 16:45:04 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 10:56:40 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# include "../octolib/includes/libft.h"
-# include <readline/history.h>
-# include <readline/readline.h>
-# include <signal.h>
-# include <stdbool.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <unistd.h>
+
+# include "../lib/libft.h"
 # define SUCCESS 0
 # define FAIL 1
 # define CODE_FAIL 1
 # define CODE_SUCCESS 0
 # define PIPE_READ 0
 # define PIPE_WRITE 1
-# define PROMPT "\033[1;32mminishell$> \033[0m"
 # define ERR_SYNT "minishell: syntax error near unexpected token"
+# define PROMPT "\033[1;32mminishell$> \033[0m"
 
 extern volatile sig_atomic_t	g_status;
 
@@ -64,37 +57,28 @@ typedef struct s_redir
 	struct s_redir				*next;
 }								t_redir;
 
-typedef struct s_exec_fd
-{
-	int							saved_stdin;
-	int							saved_stdout;
-	int							prev_fd;
-}								t_exec_fd;
-
 typedef struct s_cmd
 {
 	char						**args;
 	char						*path;
 	t_redir						*infile;
 	t_redir						*outfile;
-	int							prev_fd;
 	int							here_doc_mode;
 	int							pipe_fd[2];
+	int							saved_stdin;
+	int							saved_stdout;
 	struct s_cmd				*next;
-	t_exec_fd					*fds;
 }								t_cmd;
 
 typedef struct s_data
 {
 	char						*input;
-	char						**envp;
-	int							token_count;
-	int							last_status;
 	t_env						*env;
 	t_env						*export;
+	char						**envp;
 	t_token						*token;
 	t_cmd						*cmd_list;
-	t_exec_fd					fds;
+	int							token_count;
 }								t_data;
 
 // signaux
@@ -151,11 +135,17 @@ char							*append_error_code(t_data *data, char *extract,
 
 // exec
 char							*get_cmd_path(t_data *data, char **cmd);
-void							exec_child_process(t_data *data,
-									t_exec_fd *fds);
-int								ft_shell(t_data *data, t_exec_fd *fds);
+int								exec_child_process(t_data *data, t_cmd *cmd,
+									int prev_fd);
+int								ft_shell(t_data *data, t_cmd *cmd, int prev_fd);
 int								which_command(t_data *data, t_cmd *cmd,
-									t_exec_fd *fds);
+									int prev_fd);
+int								handle_single_command(t_data *data, t_cmd *cmd,
+									int prev_fd);
+void							handle_useless_command(t_cmd *cmd,
+									int *prev_fd);
+int								wait_for_children(pid_t last_pid);
+void							maybe_close(t_cmd *cmd, int *prev_fd);
 int								exec_line(t_data *data, t_cmd *cmd);
 
 // parse
@@ -193,13 +183,13 @@ int								ft_pwd(void);
 int								ft_cd(t_data *data);
 int								ft_env(t_data *data);
 int								ft_echo(t_data *data, t_cmd *cmd);
-int								ft_exit(t_data *data, t_cmd *cmd,
-									t_exec_fd *fds);
+int								ft_exit(t_data *data, t_cmd *cmd, int stdin,
+									int stdout);
 int								ft_isalldigit(char *str);
 
 // ryew
 int								ft_executables(t_data *data, t_cmd *cmd,
-									t_exec_fd *fds);
+									int input_fd, int output_fd);
 int								ft_export(t_data *data);
 void							sort(char **tmp);
 t_env							*init_export_list(char **env);
@@ -207,22 +197,31 @@ int								ft_unset(t_data *data);
 char							*find_cmd_path(char *cmd, t_data *data);
 
 // pipe
-int								ft_process(t_data *data, t_cmd *cmd,
-									t_exec_fd *fds);
 bool							is_builtin(char *cmd);
+int								run_builtin(t_data *data, t_cmd *cmd);
 void							exec_child(t_data *data, t_cmd *cmd,
-									t_exec_fd *fds);
+									int prev_fd);
+int								resolve_command_path(t_data *data, t_cmd *cmd);
+int								ft_process(t_data *data, t_cmd *cmd,
+									int prev_fd);
+
+// ft_pipe1
 void							ft_exit_exec(int code, t_data *data,
 									t_cmd *cmd);
-int								run_builtin(t_data *data, t_cmd *cmd,
-									t_exec_fd *fds);
-int								redirect_management(t_cmd *cmd, t_exec_fd *fds);
+int								open_infile(char *str);
+void							handle_direct_exec(t_data *data, t_cmd *cmd);
+void							handle_path_exec(t_data *data, t_cmd *cmd);
+void							handle_invalid_command(t_data *data, t_cmd *cmd,
+									int prev_fd);
+
+// ft_pipe2
 void							safe_close(int fd);
+int								redirect_management(t_cmd *cmd, int prev_fd);
 
 // pipe utils
 int								open_infile(char *str);
 int								last_infile(t_cmd *cmd);
-int								manag_infile(t_cmd *cmd, t_exec_fd *fds);
+int								manag_infile(t_cmd *cmd, int prev_fd);
 int								open_outfile(char *file, t_TokenType mode);
 int								last_outfile(t_cmd *cmd);
 int								manag_outfile(t_cmd *cmd, int *pipe_fd);
@@ -239,34 +238,25 @@ int								set_fd_cloexec(int fd);
 void							made_new_file(int *fd, char **name);
 void							fill_here_doc_file(int fd, char *delimitor);
 char							*get_here_doc(char *str);
+void							handle_sigint(int sig);
+void							reset_signals_child(void);
 
-int								ft_charnull(t_cmd *cmd);
+// Utils & remise a la norme
 char							*ft_strjoin_three(char *s1, char *s2, char *s3);
-int								handle_single_command(t_data *data, t_cmd *cmd);
-pid_t							handle_pipeline(t_data *data, t_cmd *cmd);
-void							wait_for_pipeline(pid_t last_pid, t_data *data);
-int								init_pipe_if_needed(t_cmd *cmd);
-void							update_fds_after_process(t_cmd *cmd,
-									t_exec_fd *fds);
-int								handle_exec(t_data *data, t_cmd *cmd);
-int								prepare_cmd_path(t_data *data, t_cmd *cmd);
-void							print_cmd_redirs(t_cmd *cmd);
-void							print_cmd_args(char **args);
-void							print_cmds(t_cmd *cmd);
-int								check_tokens_validity(t_token *token);
 void							ft_execve_child(t_data *data, t_cmd *cmd,
-									t_exec_fd *fds);
-void							ft_restore_std(t_exec_fd *fds);
+									int input_fd, int output_fd);
+void							ft_restore_std(int input_fd, int output_fd);
 void							ft_check_directory(t_data *data, t_cmd *cmd);
 void							ft_exit_with_error(t_data *data, t_cmd *cmd,
 									char *msg, int code);
-t_cmd							*handle_token(t_cmd *curr, t_token *token);
-void							init_fds(t_exec_fd *fds);
-void							add_pipe_node(t_cmd **curr);
-void							init_cmd_node(t_cmd **curr, t_cmd **head);
-void							add_redir(t_redir **redir_list, char *filename,
-									int type);
 void							init_data(t_data *data);
 void							free_redir_list(t_redir *redir);
+void							add_redir(t_redir **redir_list, char *filename,
+									int type);
+void							ft_lstadd_back_env(t_env **lst, t_env *new);
+char							*check_direct_access(char *cmd);
+void							print_cmd_error(char *cmd);
+char							*try_paths(char **paths, char *cmd);
+void							is_not_path(t_data *data);
 
 #endif
