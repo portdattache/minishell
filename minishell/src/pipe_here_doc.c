@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_here_doc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 19:49:33 by garside           #+#    #+#             */
-/*   Updated: 2025/06/04 11:26:49 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 22:34:25 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	fill_here_doc_file(int fd, char *delimitor)
 		str = readline("> ");
 		if (str == NULL)
 		{
-			ft_printf("bash: warning: here-document delimited"\
-						" by end-of-file (wanted `%s')\n"\
-						, delimitor);
+			ft_printf("bash: warning: here-document delimited"
+						" by end-of-file (wanted `%s')\n",
+						delimitor);
 			break ;
 		}
 		if (ft_strcmp(str, delimitor) == 0)

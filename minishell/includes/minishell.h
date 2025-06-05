@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/06/04 15:18:18 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 22:35:16 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ int								exec_line(t_data *data, t_cmd *cmd);
 void							ft_restore_std(int input_fd, int output_fd);
 void							handle_direct_exec(t_data *data, t_cmd *cmd);
 void							handle_path_exec(t_data *data, t_cmd *cmd);
-int								wait_for_children(pid_t last_pid);
+int								wait_for_children(pid_t last_pid, t_data *data);
 void							maybe_close(t_cmd *cmd, int *prev_fd);
 char							**ft_get_cmd(t_data *data);
 int								resolve_command_path(t_data *data, t_cmd *cmd);

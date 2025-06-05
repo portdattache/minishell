@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exec1.c                                         :+:      :+:    :+:   */
+/*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 19:37:08 by garside           #+#    #+#             */
-/*   Updated: 2025/06/04 10:33:00 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 22:42:42 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	wait_for_children(pid_t last_pid)
+int	wait_for_children(pid_t last_pid, t_data *data)
 {
 	int		status;
 	pid_t	wpid;
@@ -23,13 +23,13 @@ int	wait_for_children(pid_t last_pid)
 		if (wpid == last_pid)
 		{
 			if (WIFSIGNALED(status))
-				g_status = 128 + WTERMSIG(status);
+				data->last_status = 128 + WTERMSIG(status);
 			else
-				g_status = WEXITSTATUS(status);
+				data->last_status = WEXITSTATUS(status);
 		}
 		wpid = wait(&status);
 	}
-	return (g_status);
+	return (data->last_status);
 }
 
 char	*get_cmd_path(t_data *data, char **cmd)

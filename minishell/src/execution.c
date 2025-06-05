@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exec.c                                          :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:09:23 by garside           #+#    #+#             */
-/*   Updated: 2025/06/04 10:30:11 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/04 22:36:57 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	exec_line(t_data *data, t_cmd *cmd)
 	}
 	if (prev_fd != -1)
 		safe_close(prev_fd);
-	return (wait_for_children(last_pid));
+	return (wait_for_children(last_pid, data));
 }
 
 int	exec_child_process(t_data *data, t_cmd *cmd, int prev_fd)
@@ -82,13 +82,13 @@ int	ft_shell(t_data *data, t_cmd *cmd, int prev_fd)
 	signal(SIGINT, handle_sigint);
 	if (WIFSIGNALED(status))
 	{
-		g_status = 128 + WTERMSIG(status);
+		data->last_status = 128 + WTERMSIG(status);
 		if (WTERMSIG(status) == SIGINT)
 			write(STDOUT_FILENO, "\n", 1);
 	}
 	else
-		g_status = WEXITSTATUS(status);
-	return (g_status);
+		data->last_status = WEXITSTATUS(status);
+	return (data->last_status);
 }
 
 int	handle_single_command(t_data *data, t_cmd *cmd, int prev_fd)
@@ -105,12 +105,12 @@ int	handle_single_command(t_data *data, t_cmd *cmd, int prev_fd)
 			safe_close(cmd->saved_stdout);
 			return (CODE_FAIL);
 		}
-		g_status = which_command(data, cmd, prev_fd);
+		data->last_status = which_command(data, cmd, prev_fd);
 		dup2(cmd->saved_stdin, STDIN_FILENO);
 		dup2(cmd->saved_stdout, STDOUT_FILENO);
 		safe_close(cmd->saved_stdin);
 		safe_close(cmd->saved_stdout);
-		return (g_status);
+		return (data->last_status);
 	}
 	return (0);
 }

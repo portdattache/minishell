@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_parse.c                                         :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:13:50 by garside           #+#    #+#             */
-/*   Updated: 2025/06/03 17:15:59 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/05 00:10:56 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,18 @@ int	valid_parse(t_data *data)
 	{
 		if (tmp->type != WORD && !tmp->next && tmp->type != PIPE)
 		{
-			g_status = 2;
+			data->last_status = 2;
 			return (printf("%s `newline`\n", ERR_SYNT), 1);
 		}
 		if (tmp->type == PIPE && tmp->next && tmp->next->type == PIPE)
 		{
-			g_status = 2;
+			data->last_status = 2;
 			return (printf("%s `|`\n", ERR_SYNT), 1);
 		}
 		if ((tmp->type != WORD && tmp->type != PIPE) && (tmp->next
 				&& tmp->next->type != WORD))
 		{
-			g_status = 2;
+			data->last_status = 2;
 			return (printf("%s `%s`\n", ERR_SYNT, tmp->next->value), 1);
 		}
 		tmp = tmp->next;
@@ -49,9 +49,9 @@ int	valid_parse(t_data *data)
 	return (0);
 }
 
-static void	print_pipe_error(void)
+static void	print_pipe_error(t_data *data)
 {
-	g_status = 2;
+	data->last_status = 2;
 	printf("%s `|'\n", ERR_SYNT);
 }
 
@@ -72,7 +72,8 @@ int	parse(t_data *data)
 	while (token && token->next)
 		token = token->next;
 	if (token->type == PIPE)
-		return (print_pipe_error(), 1);
+		print_pipe_error(data);
+	return (1);
 	data->cmd_list = parse_tokens(data);
 	if (!data->cmd_list)
 		return (1);
