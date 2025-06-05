@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:13:50 by garside           #+#    #+#             */
-/*   Updated: 2025/06/05 00:10:56 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/06/05 13:10:15 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,52 @@ static void	print_pipe_error(t_data *data)
 	printf("%s `|'\n", ERR_SYNT);
 }
 
+// int	parse(t_data *data)
+// {
+// 	t_token	*token;
+
+// 	if (!data->input)
+// 		return (1);
+// 	data->token = ft_lexer(data);
+// 	if (!data->token)
+// 		return (1);
+// 	token = data->token;
+// 	if (valid_parse(data) == 1)
+// 		return (1);
+// 	if (token->type == PIPE)
+// 		return (printf("%s `|'\n", ERR_SYNT), 1);
+// 	while (token && token->next)
+// 		token = token->next;
+// 	if (token->type == PIPE)
+// 	{
+// 		print_pipe_error(data);
+// 		return (1);
+// 	}
+// 	data->cmd_list = parse_tokens(data);
+// 	if (!data->cmd_list)
+// 		return (1);
+// 	if (!data->cmd_list->args && !data->cmd_list->outfile
+// 		&& !data->cmd_list->infile)
+// 		return (1);
+// 	return (0);
+// }
+
+int	check_token_errors(t_data *data, t_token *token)
+{
+	if (valid_parse(data) == 1)
+		return (1);
+	if (token->type == PIPE)
+		return (printf("%s `|'\n", ERR_SYNT), 1);
+	while (token && token->next)
+		token = token->next;
+	if (token->type == PIPE)
+	{
+		print_pipe_error(data);
+		return (1);
+	}
+	return (0);
+}
+
 int	parse(t_data *data)
 {
 	t_token	*token;
@@ -65,15 +111,8 @@ int	parse(t_data *data)
 	if (!data->token)
 		return (1);
 	token = data->token;
-	if (valid_parse(data) == 1)
+	if (check_token_errors(data, token))
 		return (1);
-	if (token->type == PIPE)
-		return (printf("%s `|'\n", ERR_SYNT), 1);
-	while (token && token->next)
-		token = token->next;
-	if (token->type == PIPE)
-		print_pipe_error(data);
-	return (1);
 	data->cmd_list = parse_tokens(data);
 	if (!data->cmd_list)
 		return (1);

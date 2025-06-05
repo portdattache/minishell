@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/06/04 22:35:16 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:54:42 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ void							add_redir(t_redir **redir_list, char *filename,
 
 void							reset_signals_child(void);
 void							handle_sigint(int sig);
+void							handle_sigint_heredoc(int sig);
 void							init_signal(void);
 
 // ============================ 🧩 LEXING ======================================
@@ -132,6 +133,8 @@ char							*append_remaining_segment(t_data *data,
 
 int								parse(t_data *data);
 t_cmd							*parse_tokens(t_data *data);
+int								check_token_errors(t_data *data,
+									t_token *token);
 void							add_arg(t_cmd *cmd, char *value);
 
 void							add_token_to_list(t_token **head,
@@ -217,6 +220,7 @@ void							ft_replace_in_env(t_data *data, char *name,
 									char *value);
 int								check_name(char *str, t_env *node,
 									char *content);
+int								get_last_here_doc_index(void);
 
 // ============================= ⚠️ ERREURS ====================================
 
@@ -249,5 +253,7 @@ void							ft_exit_exec(int code, t_data *data,
 									t_cmd *cmd);
 void							ft_exit_with_error(t_data *data, t_cmd *cmd,
 									char *msg, int code);
+void							cleanup_here_doc(char *file_name,
+									char *delimitor, int fd);
 
 #endif
