@@ -1,6 +1,2 @@
-solus echo
-
-juste mettre {} ca autour de 	
-	print_pipe_error(data);
-		return (1);
-
+voici mon prjet minishell de lecole 42. J'ai des normes a respecter tel que 25 linges max par fonction,
+	5 fonctions par ficher et 4 parametres par fonction.Pas de teneraire.Et une seule variable global.

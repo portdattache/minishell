@@ -6,7 +6,7 @@
 /*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 02:51:50 by garside           #+#    #+#             */
-/*   Updated: 2025/06/04 22:34:29 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/06/05 21:24:46 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,28 @@ void	command_not_found(char *cmd)
 	ft_putstr_fd(": Command not found\n", 2);
 }
 
+// Dans print_errors.c
+
 void	no_such_file_or_directory(char *cmd)
 {
-	ft_putstr_fd("Minishell:~$ ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": No such file or directory\n", 2);
+	char	*message;
+	char	*pref;
+	char	*suf;
+
+	pref = "Minishell:~$ ";
+	suf = ": No such file or directory\n";
+	message = ft_strjoin_three(pref, cmd, suf);
+	if (message)
+	{
+		ft_putstr_fd(message, 2);
+		free(message);
+	}
+	else
+	{
+		ft_putstr_fd(pref, 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(suf, 2);
+	}
 }
 
 void	permission_denied(char *file)
