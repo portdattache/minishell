@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/06/06 15:47:16 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/06 16:59:36 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ int								redirect_management(t_cmd *cmd, int prev_fd);
 // ============================ 🐚 HERE-DOC ===================================
 
 void							made_new_file(int *fd, char **name);
-void							fill_here_doc_file(int fd, char *delimitor);
+int								fill_here_doc_file(int fd, char *delimitor);
 char							*get_here_doc(char *str);
 
 // ============================ 📊 UTILITAIRES ================================
@@ -258,5 +258,6 @@ void							cleanup_here_doc(char *file_name,
 
 // =========================================================================
 void							empty_dollar(t_data *data, t_cmd *cmd);
+void							setup_signal_heredoc(void);
 
 #endif

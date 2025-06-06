@@ -6,51 +6,11 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 19:49:33 by garside           #+#    #+#             */
-/*   Updated: 2025/06/05 18:56:10 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:06:53 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*get_here_doc(char *str)
-{
-	char				*file_name;
-	char				*delimitor;
-	int					here_doc_fd;
-	pid_t				pid;
-	int					status;
-	struct sigaction	sa;
-
-	file_name = NULL;
-	delimitor = ft_strdup(str);
-	made_new_file(&here_doc_fd, &file_name);
-	if (here_doc_fd == -1)
-		return (ft_printf("error to create a tmp file\n"), NULL);
-	pid = fork();
-	if (pid == -1)
-		return (perror("fork"), free(file_name), free(delimitor), NULL);
-	if (pid == 0)
-	{
-		sigemptyset(&sa.sa_mask);
-		sa.sa_flags = 0;
-		sa.sa_handler = handle_sigint_heredoc;
-		sigaction(SIGINT, &sa, NULL);
-		fill_here_doc_file(here_doc_fd, delimitor);
-		cleanup_here_doc(file_name, delimitor, here_doc_fd);
-		exit(0);
-	}
-	waitpid(pid, &status, 0);
-	free(delimitor);
-	close(here_doc_fd);
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-	{
-		unlink(file_name);
-		free(file_name);
-		g_status = 130;
-		return (NULL);
-	}
-	return (file_name);
-}
 
 void	made_new_file(int *fd, char **name)
 {
@@ -64,37 +24,72 @@ void	made_new_file(int *fd, char **name)
 	nb_file++;
 }
 
-void	fill_here_doc_file(int fd, char *delimitor)
+int	if_limiter(char *line, char *limiter)
 {
-	char	*str;
+	size_t	len;
 
+	len = ft_strlen(line);
+	if (len > 0 && line[len - 1] == '\n')
+		line[len - 1] = '\0';
+	if (ft_strcmp(line, limiter) == 0)
+		return (0);
+	return (1);
+}
+
+void	free_path(char *path_cmd)
+{
+	if (path_cmd != NULL)
+		free(path_cmd);
+}
+
+int	fill_here_doc_file(int fd, char *delimitor)
+{
+	char	*line;
+
+	setup_signal_heredoc();
 	while (1)
 	{
-		str = readline("> ");
-		if (str == NULL)
+		write(1, "> ", 2);
+		line = get_next_line(0);
+		if (g_status == true)
+			return (free_path(line), 0);
+		if (line == NULL)
 		{
 			ft_printf("bash: warning: here-document delimited"
 						" by end-of-file (wanted `%s')\n",
 						delimitor);
 			break ;
 		}
-		if (ft_strcmp(str, delimitor) == 0)
+		if (if_limiter(line, delimitor) == 0)
 		{
-			free(str);
+			free(line);
 			break ;
 		}
-		ft_putstr_fd(str, fd);
+		ft_putstr_fd(line, fd);
 		ft_putchar_fd('\n', fd);
-		free(str);
+		free(line);
 	}
+	return (1);
 }
 
-void	cleanup_here_doc(char *file_name, char *delimitor, int fd)
+char	*get_here_doc(char *str)
 {
-	if (file_name)
-		free(file_name);
-	if (delimitor)
-		free(delimitor);
-	if (fd >= 0)
-		close(fd);
+	char	*file_name;
+	char	*delimitor;
+	int		here_doc_fd;
+
+	if (!str)
+		return (NULL);
+	delimitor = ft_strdup(str);
+	file_name = NULL;
+	made_new_file(&here_doc_fd, &file_name);
+	if (here_doc_fd == -1)
+		return (ft_printf("error to create a tmp file\n"), NULL);
+	fill_here_doc_file(here_doc_fd, delimitor);
+	if (g_status == true)
+		return (close(here_doc_fd), unlink(file_name), free(delimitor),
+			free(file_name), NULL);
+	free(delimitor);
+	close(here_doc_fd);
+	return (file_name);
 }

@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 18:45:06 by garside           #+#    #+#             */
-/*   Updated: 2025/06/05 15:52:04 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:00:38 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,28 @@ void	handle_sigint(int sig)
 	}
 }
 
-void	handle_sigint_heredoc(int sig)
+void	signal_handler_here_doc(int signum)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	g_status = 130;
-	exit(130);
+	if (signum == SIGINT)
+	{
+		g_status = true;
+		write(1, "\n", 1);
+	}
+}
+
+void	setup_signal_heredoc(void)
+{
+	struct sigaction	sa_sigint;
+	struct sigaction	sa_sigquit;
+
+	sa_sigint.sa_handler = signal_handler_here_doc;
+	sigemptyset(&sa_sigint.sa_mask);
+	sa_sigint.sa_flags = 0;
+	sa_sigquit.sa_handler = SIG_IGN;
+	sigemptyset(&sa_sigquit.sa_mask);
+	sa_sigquit.sa_flags = 0;
+	sigaction(SIGINT, &sa_sigint, NULL);
+	sigaction(SIGQUIT, &sa_sigquit, NULL);
 }
 
 void	init_signal(void)

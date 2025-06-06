@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:10 by garside           #+#    #+#             */
-/*   Updated: 2025/06/06 15:46:41 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:16:51 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,5 @@ int	main(int ac, char **av, char **env)
 	free_env_list(data.env);
 	free_env_list(data.export);
 	rl_clear_history();
-	return (g_status);
+	return (data.last_status);
 }
