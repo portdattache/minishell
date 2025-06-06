@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_errors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 02:51:50 by garside           #+#    #+#             */
-/*   Updated: 2025/06/05 21:24:46 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/06/06 11:28:58 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ void	command_not_found(char *cmd)
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(": Command not found\n", 2);
 }
-
-// Dans print_errors.c
 
 void	no_such_file_or_directory(char *cmd)
 {

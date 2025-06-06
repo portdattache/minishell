@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/06/06 11:00:53 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:47:16 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,5 +255,8 @@ void							ft_exit_with_error(t_data *data, t_cmd *cmd,
 									char *msg, int code);
 void							cleanup_here_doc(char *file_name,
 									char *delimitor, int fd);
+
+// =========================================================================
+void							empty_dollar(t_data *data, t_cmd *cmd);
 
 #endif

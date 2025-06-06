@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executables.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 17:09:03 by garside           #+#    #+#             */
-/*   Updated: 2025/06/04 22:34:09 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/06/06 16:01:56 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@ void	ft_execve_child(t_data *data, t_cmd *cmd, int input_fd, int output_fd)
 			1);
 	ft_restore_std(input_fd, output_fd);
 	ft_check_directory(data, cmd);
+	if (access(cmd->args[0], F_OK) == 0 && access(cmd->args[0], X_OK) == -1)
+	{
+		ft_putstr_fd(cmd->args[0], 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		free_cmd_list(data);
+		free_data(data);
+		exit(126);
+	}
 	execve(cmd->args[0], cmd->args, data->envp);
 	ft_putstr_fd(cmd->args[0], 2);
 	ft_putstr_fd(": No such file or directory\n", 2);

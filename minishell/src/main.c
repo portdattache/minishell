@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 17:20:10 by garside           #+#    #+#             */
-/*   Updated: 2025/06/05 00:09:03 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:46:41 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ void	read_prompt(t_data *data)
 			ft_printf("exit\n");
 			break ;
 		}
-		add_history(data->input);
 		if (data->input[0] && !check_quotes(data->input))
 		{
+			add_history(data->input);
 			if (parse(data) == 0)
 			{
 				data->last_status = exec_line(data, data->cmd_list);

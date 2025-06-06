@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:09:23 by garside           #+#    #+#             */
-/*   Updated: 2025/06/06 10:58:43 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:31:22 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	exec_child_process(t_data *data, t_cmd *cmd, int prev_fd)
 
 	reset_signals_child();
 	signal(SIGPIPE, SIG_IGN);
+	empty_dollar(data, cmd);
 	args = cmd->args;
 	path = get_cmd_path(data, args);
 	if (redirect_management(cmd, prev_fd) == -1)
@@ -57,6 +58,7 @@ int	exec_child_process(t_data *data, t_cmd *cmd, int prev_fd)
 		close(cmd->saved_stdout);
 	if (!path)
 		is_not_path(data);
+	ft_check_directory(data, cmd);
 	execve(path, args, data->envp);
 	ft_putstr_fd("execve failed\n", 2);
 	if (data->cmd_list)

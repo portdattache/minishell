@@ -1,2 +1,4 @@
 voici mon prjet minishell de lecole 42. J'ai des normes a respecter tel que 25 linges max par fonction,
 	5 fonctions par ficher et 4 parametres par fonction.Pas de teneraire.Et une seule variable global.
+
+j'ai effectue des modif sur le find_cmd_path afin de faire des test sur le $PWD

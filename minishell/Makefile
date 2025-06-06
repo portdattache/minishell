@@ -25,6 +25,7 @@ SRC         = \
 	src/builtin_export.c \
 	src/builtin_pwd.c \
 	src/builtin_unset.c \
+	src/empty_checker.c \
 	src/env_to_array.c \
 	src/executables.c \
 	src/execution.c \

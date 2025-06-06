@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_finder.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:41:37 by garside           #+#    #+#             */
-/*   Updated: 2025/06/04 22:34:21 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:22:34 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@ char	*find_cmd_path(char *cmd, t_data *data)
 	char	**paths;
 	char	*cmd_path;
 
-	if (cmd[0] == '/')
+	if (cmd[0] == '\0')
+		return (NULL);
+	if (ft_strchr(cmd, '/'))
 	{
 		if (access(cmd, X_OK) != -1)
-			return (ft_strdup(cmd));
+			return (cmd);
 		else
 			return (NULL);
 	}
