@@ -25,7 +25,6 @@ SRC         = \
 	src/builtin_export.c \
 	src/builtin_pwd.c \
 	src/builtin_unset.c \
-	src/empty_checker.c \
 	src/env_to_array.c \
 	src/executables.c \
 	src/execution.c \
@@ -53,7 +52,8 @@ SRC         = \
 	src/structure_free_2.c \
 	src/structure_free.c \
 	src/structure_init.c \
-	src/utils.c
+	src/utils.c \
+	src/utils_checker.c
 OBJ         = $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
 
 # === PROGRESS BAR ===
