@@ -1,1 +1,13 @@
-tulas
+includes
+lib
+Makefile
+minishell
+minishell_tester
+minishell_test.log
+minishell.txt
+obj
+outfile
+solution
+src
+std.supp
+test.txt

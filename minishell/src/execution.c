@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 16:09:23 by garside           #+#    #+#             */
-/*   Updated: 2025/06/06 17:31:35 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:05:34 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,14 +103,14 @@ int	handle_single_command(t_data *data, t_cmd *cmd, int prev_fd)
 			return (perror("dup"), CODE_FAIL);
 		if (redirect_management(cmd, prev_fd) == 1)
 		{
-			dup2(cmd->saved_stdin, STDIN_FILENO);
-			dup2(cmd->saved_stdout, STDOUT_FILENO);
+			secure_dup2(cmd->saved_stdin, STDIN_FILENO);
+			secure_dup2(cmd->saved_stdout, STDOUT_FILENO);
 			safe_close(cmd->saved_stdin);
 			safe_close(cmd->saved_stdout);
 			return (CODE_FAIL);
 		}
-		dup2(cmd->saved_stdin, STDIN_FILENO);
-		dup2(cmd->saved_stdout, STDOUT_FILENO);
+		secure_dup2(cmd->saved_stdin, STDIN_FILENO);
+		secure_dup2(cmd->saved_stdout, STDOUT_FILENO);
 		safe_close(cmd->saved_stdin);
 		safe_close(cmd->saved_stdout);
 		data->last_status = which_command(data, cmd, prev_fd);

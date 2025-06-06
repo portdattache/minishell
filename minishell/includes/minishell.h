@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:20:24 by garside           #+#    #+#             */
-/*   Updated: 2025/06/06 16:59:36 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:06:26 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,5 +259,7 @@ void							cleanup_here_doc(char *file_name,
 // =========================================================================
 void							empty_dollar(t_data *data, t_cmd *cmd);
 void							setup_signal_heredoc(void);
+void							secure_dup2(int old_fd, int new_fd);
+void							secure_dup(int old_fd, int new_fd);
 
 #endif
